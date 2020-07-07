@@ -1,4 +1,4 @@
-package com.wire.integrations.backups
+package com.wire.integrations.backups.steps
 
 import java.io.BufferedInputStream
 import java.io.File
@@ -23,7 +23,12 @@ const val totalHeaderLength = androidMagicNumberLength + 1 + 2 + saltLength + uu
  */
 fun readEncryptedMetadata(encryptedBackup: File): EncryptedBackupHeader? =
     when {
-        encryptedBackup.length() > totalHeaderLength -> parse(readFileBytes(encryptedBackup, byteCount = totalHeaderLength))
+        encryptedBackup.length() > totalHeaderLength -> parse(
+            readFileBytes(
+                encryptedBackup,
+                byteCount = totalHeaderLength
+            )
+        )
         else -> null.also { print("Backup file header corrupted or invalid") }
     }
 
@@ -70,7 +75,13 @@ private fun parse(bytes: ByteArray): EncryptedBackupHeader? {
         val opslimit = int
         val memlimit = int
         // create header
-        EncryptedBackupHeader(salt, uuidHash, opslimit, memlimit, currentVersion)
+        EncryptedBackupHeader(
+            salt,
+            uuidHash,
+            opslimit,
+            memlimit,
+            currentVersion
+        )
     }
 }
 

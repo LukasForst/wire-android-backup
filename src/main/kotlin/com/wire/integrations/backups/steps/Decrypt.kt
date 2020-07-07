@@ -1,4 +1,4 @@
-package com.wire.integrations.backups
+package com.wire.integrations.backups.steps
 
 import org.libsodium.jni.NaCl
 import org.libsodium.jni.Sodium
@@ -65,7 +65,10 @@ fun hash(
 
 
 private fun initPull(key: ByteArray, header: ByteArray): ByteArray? =
-    initializeState(key, header) { s, k, h -> Sodium.crypto_secretstream_xchacha20poly1305_init_pull(s, k, h) }
+    initializeState(
+        key,
+        header
+    ) { s, k, h -> Sodium.crypto_secretstream_xchacha20poly1305_init_pull(s, k, h) }
 
 private fun initializeState(key: ByteArray, header: ByteArray, init: (ByteArray, ByteArray, ByteArray) -> Int): ByteArray? {
     //Got this magic number from https://github.com/joshjdevl/libsodium-jni/blob/master/src/test/java/org/libsodium/jni/crypto/SecretStreamTest.java#L48

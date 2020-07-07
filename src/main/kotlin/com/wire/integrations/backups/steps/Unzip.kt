@@ -1,4 +1,4 @@
-package com.wire.integrations.backups
+package com.wire.integrations.backups.steps
 
 import net.lingala.zip4j.ZipFile
 import java.io.File

@@ -1,6 +1,9 @@
 package com.wire.integrations.backups
 
 import com.wire.integrations.backups.utils.addLibraryPath
+import com.wire.integrations.backups.steps.decryptDatabase
+import com.wire.integrations.backups.steps.extractBackup
+import com.wire.integrations.backups.steps.initSodium
 import java.io.File
 import java.util.UUID
 
