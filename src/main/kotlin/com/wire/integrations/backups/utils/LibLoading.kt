@@ -15,12 +15,12 @@ fun addLibraryPath(pathToAdd: String) {
     val paths = usrPathsField.get(null) as Array<String>
 
     // check if the path to add is already present
-    if(paths.contains(pathToAdd)) return
+    if (paths.contains(pathToAdd)) return
 
-    // add the new path
-    val newPaths = paths + pathToAdd
-    usrPathsField.set(null, newPaths)
-
-    // set property
-    System.setProperty("java.library.path", newPaths.joinToString(":"))
+    with(paths + pathToAdd) {
+        // add the new path
+        usrPathsField.set(null, this)
+        // set property
+        System.setProperty("java.library.path", joinToString(":"))
+    }
 }

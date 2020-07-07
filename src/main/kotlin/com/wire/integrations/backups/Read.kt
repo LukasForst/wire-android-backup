@@ -5,13 +5,75 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 
-const val androidMagicNumber = "WBUA"
-const val currentVersion: Short = 2
-const val saltLength = 16
-const val uuidHashLength = 32
+// some magic constants from the original repo https://github.com/wireapp/wire-android
+private const val androidMagicNumber = "WBUA"
+private const val currentVersion: Short = 2
+private const val saltLength = 16
+private const val uuidHashLength = 32
 
-const val androidMagicNumberLength = 4
+private const val androidMagicNumberLength = 4
+
+/**
+ * Length of the header in the encrypted file. Magic constant taken from https://github.com/wireapp/wire-android
+ */
 const val totalHeaderLength = androidMagicNumberLength + 1 + 2 + saltLength + uuidHashLength + 4 + 4
+
+/**
+ * Reads encrypted meta data, returns null if it was not possible to read them.
+ */
+fun readEncryptedMetadata(encryptedBackup: File): EncryptedBackupHeader? =
+    when {
+        encryptedBackup.length() > totalHeaderLength -> parse(readFileBytes(encryptedBackup, byteCount = totalHeaderLength))
+        else -> null.also { print("Backup file header corrupted or invalid") }
+    }
+
+/**
+ * Read file starting from [offset].
+ */
+fun readFileBytes(file: File, offset: Int = 0, byteCount: Int? = null): ByteArray {
+    val outputSize = byteCount ?: file.length().toInt() - offset
+
+    return ByteArray(outputSize).apply {
+        BufferedInputStream(FileInputStream(file)).use {
+            it.skip(offset.toLong())
+            it.read(this)
+        }
+    }
+}
+
+private fun parse(bytes: ByteArray): EncryptedBackupHeader? {
+    val buffer = ByteBuffer.wrap(bytes)
+
+    if (bytes.size != totalHeaderLength)
+        return null.also { print("Invalid header length") }
+
+    val magicNumber = ByteArray(androidMagicNumberLength)
+        .apply { buffer.get(this) }
+        .joinToString("") { it.toChar().toString() }
+
+    if (magicNumber != androidMagicNumber)
+        return null.also { print("archive has incorrect magic number") }
+
+    // skip null byte
+    buffer.get()
+
+    // check version
+    if (buffer.short != currentVersion)
+        return null.also { print("Unsupported backup version") }
+
+    // parse header
+    return with(buffer) {
+        // create buffers fro results
+        val salt = ByteArray(saltLength).also { get(it) }
+        val uuidHash = ByteArray(uuidHashLength).also { get(it) }
+        // read limits
+        val opslimit = int
+        val memlimit = int
+        // create header
+        EncryptedBackupHeader(salt, uuidHash, opslimit, memlimit, currentVersion)
+    }
+}
+
 
 data class EncryptedBackupHeader(
     val salt: ByteArray,
@@ -19,55 +81,28 @@ data class EncryptedBackupHeader(
     val opslimit: Int,
     val memlimit: Int,
     val version: Short = currentVersion
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-fun readEncryptedMetadata(encryptedBackup: File): EncryptedBackupHeader? =
-    if (encryptedBackup.length() > totalHeaderLength) {
-        val encryptedMetadataBytes = readFileBytes(encryptedBackup, byteCount = totalHeaderLength)
-        parse(encryptedMetadataBytes)
-    } else {
-        print("Backup file header corrupted or invalid")
-        null
+        other as EncryptedBackupHeader
+
+        if (!salt.contentEquals(other.salt)) return false
+        if (!uuidHash.contentEquals(other.uuidHash)) return false
+        if (opslimit != other.opslimit) return false
+        if (memlimit != other.memlimit) return false
+        if (version != other.version) return false
+
+        return true
     }
 
-fun readFileBytes(file: File, offset: Int = 0, byteCount: Int? = null): ByteArray {
-    val outputSize = byteCount ?: file.length().toInt() - offset
-    val result = ByteArray(outputSize)
-    BufferedInputStream(FileInputStream(file)).use {
-        it.skip(offset.toLong())
-        it.read(result)
-    }
-    return result
-}
-
-fun parse(bytes: ByteArray): EncryptedBackupHeader? {
-    val buffer = ByteBuffer.wrap(bytes)
-
-    return if (bytes.size == totalHeaderLength) {
-        val magicNumber = ByteArray(androidMagicNumberLength)
-        buffer.get(magicNumber)
-
-        if (magicNumber.joinToString("") { it.toChar().toString() } == androidMagicNumber) {
-            buffer.get() //skip null byte
-            val version = buffer.short
-            if (version == currentVersion) {
-                val salt = ByteArray(saltLength)
-                val uuidHash = ByteArray(uuidHashLength)
-                buffer.get(salt)
-                buffer.get(uuidHash)
-                val opslimit = buffer.int
-                val memlimit = buffer.int
-                EncryptedBackupHeader(salt, uuidHash, opslimit, memlimit, currentVersion)
-            } else {
-                print("Unsupported backup version")
-                null
-            }
-        } else {
-            print("archive has incorrect magic number")
-            null
-        }
-    } else {
-        print("Invalid header length")
-        null
+    override fun hashCode(): Int {
+        var result = salt.contentHashCode()
+        result = 31 * result + uuidHash.contentHashCode()
+        result = 31 * result + opslimit
+        result = 31 * result + memlimit
+        result = 31 * result + version
+        return result
     }
 }
