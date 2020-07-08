@@ -1,6 +1,7 @@
 package pw.forst.wire.android.backups;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import static pw.forst.wire.android.backups.steps.OrchestrateKt.decryptAndExtrac
 import static pw.forst.wire.android.backups.steps.UnzipKt.extractBackup;
 import static pw.forst.wire.android.backups.utils.LibLoadingKt.addLibraryPath;
 
+@Disabled
 public class JavaTest {
 
     private final String dbFile = "testing-assets/backup.android_wbu";

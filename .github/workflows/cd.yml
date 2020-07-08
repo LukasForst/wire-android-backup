@@ -16,9 +16,6 @@ jobs:
         with:
           java-version: 11.0.3
 
-      - name: Execute test with gradle
-        run: ./gradlew test --stacktrace --info
-
       - name: Publish to GitHub Packages
         run: ./gradlew publish
         env:
