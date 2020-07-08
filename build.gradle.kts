@@ -10,7 +10,8 @@ plugins {
 }
 
 group = "pw.forst.wire.android.backups"
-version = "1.0-SNAPSHOT"
+version = versioning.info.lastTag
+
 
 repositories {
     mavenCentral()
