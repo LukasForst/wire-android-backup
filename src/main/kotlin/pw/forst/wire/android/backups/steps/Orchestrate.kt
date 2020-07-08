@@ -19,6 +19,8 @@ fun decryptAndExtract(databaseFilePath: String, password: String, userId: String
  * Returns database file or null when it was not possible to extract the database.
  */
 fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID): File? =
-    decryptDatabase(databaseFile, password, userId)?.let {
-        extractBackup(it, userId, "./")
+    initSodium().let {
+        decryptDatabase(databaseFile, password, userId)?.let {
+            extractBackup(it, userId, "./")
+        }
     }
