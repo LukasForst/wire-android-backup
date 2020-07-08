@@ -16,4 +16,4 @@ jobs:
           java-version: 11.0.3
 
       - name: Execute test with gradle
-        run: ./gradlew test
+        run: ./gradlew test --stacktrace --info
