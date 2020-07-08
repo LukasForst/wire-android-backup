@@ -16,16 +16,13 @@ fun decryptDatabase(databaseFile: File, password: ByteArray, userId: UUID): File
         return null.also { print("Uuid hashes don't match") }
     }
 
-    val encryptedBackupBytes = readFileBytes(
-        databaseFile,
-        totalHeaderLength
-    )
+    val encryptedBackupBytes = readFileBytes(databaseFile, totalHeaderLength)
     val decrypted = decrypt(encryptedBackupBytes, password, metadata.salt)
         ?: return null.also { print("backup decryption failed") }
 
     return File.createTempFile("wire_backup", ".zip")
-        .also {
-            it.deleteOnExit()
-            it.writeBytes(decrypted)
+        .apply {
+            deleteOnExit()
+            writeBytes(decrypted)
         }
 }
