@@ -19,6 +19,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
+
     val junitVersion = "5.6.2"
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
 }
@@ -33,5 +34,13 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    withType<Test> {
+        systemProperties["java.library.path"] = "${projectDir}/libs"
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
