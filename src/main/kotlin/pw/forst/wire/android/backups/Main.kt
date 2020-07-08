@@ -1,14 +1,14 @@
-package com.wire.integrations.backups
+package pw.forst.wire.android.backups
 
-import com.wire.integrations.backups.steps.decryptAndExtract
-import com.wire.integrations.backups.steps.decryptDatabase
-import com.wire.integrations.backups.steps.extractBackup
-import com.wire.integrations.backups.steps.initSodium
-import com.wire.integrations.backups.utils.addLibraryPath
+import pw.forst.wire.android.backups.steps.decryptAndExtract
+import pw.forst.wire.android.backups.steps.decryptDatabase
+import pw.forst.wire.android.backups.steps.extractBackup
+import pw.forst.wire.android.backups.steps.initSodium
+import pw.forst.wire.android.backups.utils.addLibraryPath
 import java.io.File
 import java.util.UUID
 
-fun main() {
+fun testMain() {
     addLibraryPath("libs")
     initSodium()
 
@@ -20,7 +20,7 @@ fun main() {
     extractBackup(decrypted, userId, ".")
 }
 
-fun main3(args: Array<String>) {
+fun main(args: Array<String>) {
     addLibraryPath("libs")
     initSodium()
 

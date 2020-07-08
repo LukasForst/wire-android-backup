@@ -1,4 +1,4 @@
-package com.wire.integrations.backups;
+package pw.forst.wire.android.backups;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.UUID;
 
-import static com.wire.integrations.backups.steps.DatabaseDecryptKt.decryptDatabase;
-import static com.wire.integrations.backups.steps.DecryptKt.initSodium;
-import static com.wire.integrations.backups.steps.OrchestrateKt.decryptAndExtract;
-import static com.wire.integrations.backups.steps.UnzipKt.extractBackup;
-import static com.wire.integrations.backups.utils.LibLoadingKt.addLibraryPath;
+import static pw.forst.wire.android.backups.steps.DatabaseDecryptKt.decryptDatabase;
+import static pw.forst.wire.android.backups.steps.DecryptKt.initSodium;
+import static pw.forst.wire.android.backups.steps.OrchestrateKt.decryptAndExtract;
+import static pw.forst.wire.android.backups.steps.UnzipKt.extractBackup;
+import static pw.forst.wire.android.backups.utils.LibLoadingKt.addLibraryPath;
 
 public class JavaTest {
 

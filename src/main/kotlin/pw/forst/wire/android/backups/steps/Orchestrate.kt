@@ -1,4 +1,4 @@
-package com.wire.integrations.backups.steps
+package pw.forst.wire.android.backups.steps
 
 import java.io.File
 import java.util.UUID
@@ -8,7 +8,11 @@ import java.util.UUID
  * Returns database file or null when it was not possible to extract the database.
  */
 fun decryptAndExtract(databaseFilePath: String, password: String, userId: String): File? =
-    decryptAndExtract(File(databaseFilePath), password.toByteArray(), UUID.fromString(userId))
+    decryptAndExtract(
+        File(databaseFilePath),
+        password.toByteArray(),
+        UUID.fromString(userId)
+    )
 
 /**
  * Decrypts the backup and export the database.

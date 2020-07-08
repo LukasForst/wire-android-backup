@@ -1,4 +1,4 @@
-package com.wire.integrations.backups.steps
+package pw.forst.wire.android.backups.steps
 
 import java.io.BufferedInputStream
 import java.io.File

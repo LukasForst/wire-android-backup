@@ -1,4 +1,4 @@
-package com.wire.integrations.backups.steps
+package pw.forst.wire.android.backups.steps
 
 import net.lingala.zip4j.ZipFile
 import java.io.File

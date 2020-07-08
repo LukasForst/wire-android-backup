@@ -1,4 +1,4 @@
-package com.wire.integrations.backups.steps
+package pw.forst.wire.android.backups.steps
 
 import org.libsodium.jni.NaCl
 import org.libsodium.jni.Sodium
@@ -37,8 +37,10 @@ fun decrypt(input: ByteArray, password: ByteArray, salt: ByteArray): ByteArray? 
         state, decrypted, IntArray(0), ByteArray(1), cipherText, cipherText.size,
         ByteArray(0), 0
     )
-
-    return if (returnCode == 0) decrypted else null.also { print("Failed to decrypt backup, got code $returnCode") }
+    return when (returnCode) {
+        0 -> decrypted
+        else -> null.also { print("Failed to decrypt backup, got code $returnCode") }
+    }
 }
 
 /**
@@ -60,7 +62,10 @@ fun hash(
         Sodium.crypto_pwhash_alg_default()
     )
 
-    return if (ret == 0) output else null
+    return when (ret) {
+        0 -> output
+        else -> null
+    }
 }
 
 

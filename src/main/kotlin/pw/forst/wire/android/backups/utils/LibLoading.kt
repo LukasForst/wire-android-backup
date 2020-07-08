@@ -1,4 +1,4 @@
-package com.wire.integrations.backups.utils
+package pw.forst.wire.android.backups.utils
 
 
 /**
