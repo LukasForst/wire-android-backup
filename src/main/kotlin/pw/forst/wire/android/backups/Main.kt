@@ -8,19 +8,19 @@ import pw.forst.wire.android.backups.utils.addLibraryPath
 import java.io.File
 import java.util.UUID
 
-fun testMain() {
+fun main() {
     addLibraryPath("libs")
     initSodium()
 
-    val db = File("testing-assets/backup.android_wbu")
-    val userId = UUID.fromString("199a7b4b-4342-4de6-b4cb-f39852ee445b")
-    val password = "a".toByteArray()
+    val db = File("Wire-maciek102-Backup_20200708.android_wbu")
+    val userId = UUID.fromString("2f9e89c9-78a7-477d-8def-fbd7ca3846b5")
+    val password = "Qwerty1!".toByteArray()
     val decrypted = decryptDatabase(db, password, userId) ?: return
 
     extractBackup(decrypted, userId, ".")
 }
 
-fun main(args: Array<String>) {
+fun main2(args: Array<String>) {
     addLibraryPath("libs")
     initSodium()
 
