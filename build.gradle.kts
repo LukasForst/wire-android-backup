@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "pw.forst.wire.android.extraction"
-version = "1.9.9"
+version = "1.9.97"
 
 
 repositories {
@@ -20,7 +20,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("ai.blindspot.ktoolz", "ktoolz", "1.0.6")
-
+    implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.1")
+    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.1")
     // libsodium for decryption
     implementation("com.github.joshjdevl.libsodiumjni", "libsodium-jni", "2.0.2")
     // unzip

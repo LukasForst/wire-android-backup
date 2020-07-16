@@ -6,7 +6,7 @@ data class MessageDto(
     val id: UUID,
     val conversationId: UUID,
     val userId: UUID,
-    // TODO WTF?
+    // TODO WTF? yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
     val time: String,
     // TODO is this formatted or what?
     val content: String,

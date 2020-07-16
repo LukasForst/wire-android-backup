@@ -1,5 +1,6 @@
 package pw.forst.wire.android.backups.database.converters
 
+import ai.blindspot.ktoolz.extensions.jacksonMapper
 import ai.blindspot.ktoolz.extensions.whenNull
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
@@ -7,23 +8,36 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import pw.forst.wire.android.backups.database.dto.MessageDto
 import pw.forst.wire.android.backups.database.model.Messages
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.UUID
+
+private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    .withZone(ZoneOffset.UTC)
+
 
 fun Transaction.getTextMessages() =
     Messages.select {
         Messages.messageType eq "Text"
-    }.map {
+    }.map { row ->
         MessageDto(
-            id = UUID.fromString(it[Messages.id]),
-            conversationId = UUID.fromString(it[Messages.conversationId]),
-            userId = UUID.fromString(it[Messages.userId]),
-            // TODO god knows what this is
-            time = it[Messages.time].toString(),
-            // TODO what is the formatting?
-            content = it[Messages.content].whenNull { print("No content!") } ?: "",
-            quote = it[Messages.quote]?.let { quote -> UUID.fromString(quote) }
+            id = UUID.fromString(row[Messages.id]),
+            conversationId = UUID.fromString(row[Messages.conversationId]),
+            userId = UUID.fromString(row[Messages.userId]),
+            time = Instant.ofEpochMilli(row[Messages.time].toLong()).let { dateFormatter.format(it) },
+            content = parseContent(row[Messages.content]),
+            quote = row[Messages.quote]?.let { quote -> UUID.fromString(quote) }
         )
     }
+
+
+// TODO support for mentions
+private fun parseContent(content: String?): String =
+    content
+        ?.let { jacksonMapper().readTree(content).get("content").asText() }
+        .whenNull { print("No content! - $content") }
+        ?: ""
 
 
 fun main() {

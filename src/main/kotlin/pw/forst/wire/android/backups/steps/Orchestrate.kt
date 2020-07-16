@@ -21,6 +21,6 @@ fun decryptAndExtract(databaseFilePath: String, password: String, userId: String
 fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID): File? =
     initSodium().let {
         decryptDatabase(databaseFile, password, userId)?.let {
-            extractBackup(it, userId, "./")
+            extractBackup(it, userId, "tmp")
         }
     }
