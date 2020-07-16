@@ -17,7 +17,8 @@ fun main() {
     val password = "Qwerty1!".toByteArray()
     val decrypted = decryptDatabase(db, password, userId) ?: return
 
-    extractBackup(decrypted, userId, ".")
+    val (metadata, file) = extractBackup(decrypted, userId, ".")
+    print(metadata)
 }
 
 fun main2(args: Array<String>) {

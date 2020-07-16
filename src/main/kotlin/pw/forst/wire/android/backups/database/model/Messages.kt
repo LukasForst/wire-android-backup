@@ -9,7 +9,7 @@ object Messages: Table("Messages") {
     val userId = text("user_id")
     val content = text("content").nullable()
     val protos = blob("protos").nullable()
-    val time = integer("time")
+    val time = long("time")
     val firstMessage = integer("first_msg")
     val members = text("members").nullable()
     val recipient = text("recipient").nullable()

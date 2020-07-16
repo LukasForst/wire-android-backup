@@ -15,6 +15,7 @@ fun extractDatabase(userId: UUID, databasePath: String): DatabaseDto {
 
 fun extractDatabase(userId: UUID) = transaction {
     DatabaseDto(
+        getDatabaseMetadata(userId),
         getNamedConversations(),
         getDirectMessages(userId),
         getTextMessages()

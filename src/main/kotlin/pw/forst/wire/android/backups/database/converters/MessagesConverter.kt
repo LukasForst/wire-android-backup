@@ -1,12 +1,12 @@
 package pw.forst.wire.android.backups.database.converters
 
-import ai.blindspot.ktoolz.extensions.jacksonMapper
-import ai.blindspot.ktoolz.extensions.whenNull
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import pw.forst.wire.android.backups.database.dto.MessageDto
+import pw.forst.wire.android.backups.database.model.MessageContent
 import pw.forst.wire.android.backups.database.model.Messages
 import java.time.Instant
 import java.time.ZoneOffset
@@ -18,26 +18,19 @@ private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.S
 
 
 fun Transaction.getTextMessages() =
-    Messages.select {
-        Messages.messageType eq "Text"
+    (Messages leftJoin MessageContent).select {
+        (Messages.messageType eq "Text") and
+                (Messages.id eq MessageContent.messageId)
     }.map { row ->
         MessageDto(
             id = UUID.fromString(row[Messages.id]),
             conversationId = UUID.fromString(row[Messages.conversationId]),
             userId = UUID.fromString(row[Messages.userId]),
-            time = Instant.ofEpochMilli(row[Messages.time].toLong()).let { dateFormatter.format(it) },
-            content = parseContent(row[Messages.content]),
+            time = Instant.ofEpochMilli(row[Messages.time]).let { dateFormatter.format(it) },
+            content = row[MessageContent.content],
             quote = row[Messages.quote]?.let { quote -> UUID.fromString(quote) }
         )
     }
-
-
-// TODO support for mentions
-private fun parseContent(content: String?): String =
-    content
-        ?.let { jacksonMapper().readTree(content).get("content").asText() }
-        .whenNull { print("No content! - $content") }
-        ?: ""
 
 
 fun main() {

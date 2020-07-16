@@ -5,10 +5,12 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import pw.forst.wire.android.backups.database.dto.DatabaseMetadata
 import pw.forst.wire.android.backups.database.dto.DirectConversationDto
 import pw.forst.wire.android.backups.database.dto.NamedConversationDto
 import pw.forst.wire.android.backups.database.model.ConversationMembers
 import pw.forst.wire.android.backups.database.model.Conversations
+import pw.forst.wire.android.backups.database.model.Users
 import java.util.UUID
 
 fun Transaction.getNamedConversations() =
@@ -34,6 +36,18 @@ fun Transaction.getDirectMessages(myId: UUID) =
                 UUID.fromString(it[ConversationMembers.userId])
             )
         }
+
+fun Transaction.getDatabaseMetadata(myId: UUID) =
+    Users.select {
+        Users.id eq myId.toString()
+    }.first().let {
+        DatabaseMetadata(
+            userId = UUID.fromString(it[Users.id]),
+            name = it[Users.name],
+            handle = it[Users.handle],
+            email = it[Users.email]
+        )
+    }
 
 fun main() {
     val db = Database.connect(
