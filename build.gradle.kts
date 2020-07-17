@@ -9,20 +9,37 @@ plugins {
 
 }
 
-group = "pw.forst.wire.android.backups"
-version = versioning.info.lastTag
+group = "pw.forst.wire.android.extraction"
+version = "1.9.917"
 
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("ai.blindspot.ktoolz", "ktoolz", "1.0.6")
+    implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.1")
+    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.1")
+    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.1")
+
     // libsodium for decryption
     implementation("com.github.joshjdevl.libsodiumjni", "libsodium-jni", "2.0.2")
     // unzip
     implementation("net.lingala.zip4j", "zip4j", "2.6.1")
+
+    // logging
+    implementation("io.github.microutils", "kotlin-logging", "1.7.9")
+    implementation("ch.qos.logback", "logback-classic", "1.2.3")
+
+    implementation("org.xerial", "sqlite-jdbc", "3.32.3")
+    val exposedVersion = "0.26.1"
+    implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
+
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
