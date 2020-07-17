@@ -6,6 +6,7 @@ import pw.forst.wire.android.backups.database.dto.DatabaseDto
 import java.io.File
 import java.util.UUID
 
+@Suppress("unused") // library API used in recording bot
 fun extractDatabase(userId: UUID, databaseFile: File) = extractDatabase(userId, databaseFile.absolutePath)
 
 fun extractDatabase(userId: UUID, databasePath: String): DatabaseDto {
@@ -18,6 +19,7 @@ fun extractDatabase(userId: UUID) = transaction {
         getDatabaseMetadata(userId),
         getNamedConversations(),
         getDirectMessages(userId),
-        getTextMessages()
+        getTextMessages(),
+        getConversationsData()
     )
 }

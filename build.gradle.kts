@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "pw.forst.wire.android.extraction"
-version = "1.9.914"
+version = "1.9.915"
 
 
 repositories {
