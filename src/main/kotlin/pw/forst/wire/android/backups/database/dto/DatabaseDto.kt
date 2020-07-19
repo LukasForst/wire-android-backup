@@ -5,5 +5,6 @@ data class DatabaseDto(
     val namedConversations: List<NamedConversationDto>,
     val directConversations: List<DirectConversationDto>,
     val messages: List<MessageDto>,
-    val conversationsData: ConversationsDataDto
+    val conversationsData: ConversationsDataDto,
+    val attachments: List<AttachmentDto>
 )

@@ -20,6 +20,7 @@ fun extractDatabase(userId: UUID) = transaction {
         getNamedConversations(),
         getDirectMessages(userId),
         getTextMessages(),
-        getConversationsData()
+        getConversationsData(),
+        getAttachments()
     )
 }

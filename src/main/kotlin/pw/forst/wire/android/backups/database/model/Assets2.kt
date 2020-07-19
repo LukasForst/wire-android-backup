@@ -9,10 +9,11 @@ object Assets2 : Table("Assets2") {
     val encryption = text("encryption")
     val mime = text("mime")
     val sha = blob("sha")
+    val size = integer("size")
     val sourceT = text("source").nullable()
     val preview = text("preview").nullable()
     val details = text("details")
-    val conversationId = text("conv_id").nullable()
+    val conversationId = text("conversation_id").nullable()
 
     override val primaryKey = PrimaryKey(id)
 }
