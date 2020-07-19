@@ -41,13 +41,13 @@ fun Transaction.getConversationsData(): ConversationsDataDto {
         .map {
             ConversationAddMemberDto(
                 conversationId = it[Messages.conversationId].toUuid(),
-                timeStamp = convertToStringTime(it[Messages.time]),
+                timeStamp = it[Messages.time].toExportDate(),
                 addingUser = it[Messages.userId].toUuid(),
                 addedUsers = it[Messages.members]
                     ?.split(",")
                     ?.map(String::toUuid)
-                        ?: emptyList()
-                )
+                    ?: emptyList()
+            )
             }
 
     val leavingMembers = Messages
@@ -56,12 +56,12 @@ fun Transaction.getConversationsData(): ConversationsDataDto {
         .map {
             ConversationLeaveMembersDto(
                 conversationId = it[Messages.conversationId].toUuid(),
-                timeStamp = convertToStringTime(it[Messages.time]),
+                timeStamp = it[Messages.time].toExportDate(),
                 leavingMembers = it[Messages.members]
                     ?.split(",")
                     ?.map(String::toUuid)
                     ?: emptyList()
-                )
+            )
             }
 
     val members = ConversationMembers

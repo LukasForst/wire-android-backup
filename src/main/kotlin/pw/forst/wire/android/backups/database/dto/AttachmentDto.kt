@@ -1,5 +1,6 @@
 package pw.forst.wire.android.backups.database.dto
 
+import pw.forst.wire.android.backups.database.converters.ExportDate
 import java.util.UUID
 
 data class AttachmentDto(
@@ -7,13 +8,12 @@ data class AttachmentDto(
     val conversationId: UUID,
     val name: String,
     val sender: UUID,
-    val timestamp: String,
+    val timestamp: ExportDate,
     val contentLength: Int,
     val mimeType: String,
     val assetToken: String,
     val assetKey: String,
-    val sha: ByteArray, // 32 bytes
-    val decryptionKey: String,
+    val sha: ByteArray,
     val protobuf: ByteArray
 ) {
     override fun equals(other: Any?): Boolean {
@@ -32,7 +32,6 @@ data class AttachmentDto(
         if (assetToken != other.assetToken) return false
         if (assetKey != other.assetKey) return false
         if (!sha.contentEquals(other.sha)) return false
-        if (decryptionKey != other.decryptionKey) return false
         if (!protobuf.contentEquals(other.protobuf)) return false
 
         return true
@@ -49,7 +48,6 @@ data class AttachmentDto(
         result = 31 * result + assetToken.hashCode()
         result = 31 * result + assetKey.hashCode()
         result = 31 * result + sha.contentHashCode()
-        result = 31 * result + decryptionKey.hashCode()
         result = 31 * result + protobuf.contentHashCode()
         return result
     }

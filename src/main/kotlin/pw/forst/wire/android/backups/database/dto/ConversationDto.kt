@@ -1,5 +1,6 @@
 package pw.forst.wire.android.backups.database.dto
 
+import pw.forst.wire.android.backups.database.converters.ExportDate
 import java.util.UUID
 
 data class NamedConversationDto(
@@ -27,11 +28,11 @@ data class ConversationAddMemberDto(
     val addingUser: UUID,
     val conversationId: UUID,
     val addedUsers: List<UUID>,
-    val timeStamp: String
+    val timeStamp: ExportDate
 )
 
 data class ConversationLeaveMembersDto(
     val leavingMembers: List<UUID>,
     val conversationId: UUID,
-    val timeStamp: String
+    val timeStamp: ExportDate
 )
