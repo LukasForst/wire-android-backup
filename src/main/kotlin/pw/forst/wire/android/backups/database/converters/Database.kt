@@ -21,6 +21,7 @@ fun extractDatabase(userId: UUID) = transaction {
         getDirectMessages(userId),
         getTextMessages(),
         getConversationsData(),
-        getAttachments()
+        getAttachments(),
+        getLikings()
     )
 }

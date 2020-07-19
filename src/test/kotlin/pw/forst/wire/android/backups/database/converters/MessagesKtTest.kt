@@ -2,10 +2,11 @@ package pw.forst.wire.android.backups.database.converters
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
-import kotlin.test.Ignore
-import kotlin.test.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import kotlin.test.assertTrue
 
-@Ignore
+@Disabled
 class Messages {
     @Test
     fun `test getMessages`() {
@@ -13,8 +14,11 @@ class Messages {
             "jdbc:sqlite:/Users/lukas/work/wire/android-db-decryption/2f9e89c9-78a7-477d-8def-fbd7ca3846b5.sqlite"
         )
 
-        transaction {
-            println(getTextMessages().joinToString("\n"))
+        val messages = transaction {
+            getTextMessages()
         }
+
+        assertTrue { messages.isNotEmpty() }
+        print(messages.joinToString("\n"))
     }
 }
