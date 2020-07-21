@@ -7,21 +7,22 @@ import java.util.UUID
  * Decrypts the backup and export the database.
  * Returns database file or null when it was not possible to extract the database.
  */
-fun decryptAndExtract(databaseFilePath: String, password: String, userId: String): DecryptionResult? =
+fun decryptAndExtract(databaseFilePath: String, password: String, userId: String, pathToNewFolder: String = "tmp"): DecryptionResult? =
     decryptAndExtract(
         File(databaseFilePath),
         password.toByteArray(),
-        UUID.fromString(userId)
+        UUID.fromString(userId),
+        pathToNewFolder
     )
 
 /**
  * Decrypts the backup and export the database.
  * Returns database file or null when it was not possible to extract the database.
  */
-fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID): DecryptionResult? =
+fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID, pathToNewFolder: String = "tmp"): DecryptionResult? =
     initSodium().let {
         decryptDatabase(databaseFile, password, userId)?.let {
-            val (metadata, db) = extractBackup(it, userId, "tmp")
+            val (metadata, db) = extractBackup(it, userId, pathToNewFolder)
             DecryptionResult(metadata, db)
         }
     }
