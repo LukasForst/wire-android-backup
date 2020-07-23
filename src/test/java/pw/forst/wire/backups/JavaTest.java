@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
 import static pw.forst.wire.backups.android.steps.DatabaseDecryptKt.decryptDatabase;
@@ -26,7 +24,6 @@ public class JavaTest {
     public void testJavaExecution_decryptAndExtract() {
         addLibraryPath("libs");
         initSodium();
-        List<byte[]> a = new LinkedList<>();
         Assertions.assertNotNull(decryptAndExtract(dbFile, password, userId, "./tmp"));
     }
 
