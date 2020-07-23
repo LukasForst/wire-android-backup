@@ -32,7 +32,7 @@ class DecryptKtTest {
     @Test
     @Disabled
     fun `test ios decryption dejan`() {
-        val db = File("/Users/lukas/work/wire/android-db-decryption/dejan.ios_wbu")
+        val db = File("/Users/lukas/work/wire/android-db-decryption/ignored-assets/dejan.ios_wbu")
         val userId = UUID.fromString("a106fcd5-3146-4551-a870-9b13b125f376")
         val password = "Qwerty123!"
         val decrypted = decrypt(db, password, userId)
@@ -43,7 +43,7 @@ class DecryptKtTest {
     @Test
     @Disabled
     fun `test ios decryption eva`() {
-        val db = File("/Users/lukas/work/wire/android-db-decryption/ios_backup.ios_wbu")
+        val db = File("/Users/lukas/work/wire/android-db-decryption/ignored-assets/ios_backup.ios_wbu")
         val userId = UUID.fromString("e4d71ce0-eb3a-48f6-b319-d677a2dd23b1")
         val password = "Aa12345!"
         val decrypted = decrypt(db, password, userId)

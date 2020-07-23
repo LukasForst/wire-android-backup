@@ -17,7 +17,7 @@ class DecryptionTest {
         addLibraryPath("libs")
         initSodium()
 
-        val db = File("Wire-maciek102-Backup_20200708.android_wbu")
+        val db = File("ignored-assets/Wire-maciek102-Backup_20200708.android_wbu")
         val userId = UUID.fromString("2f9e89c9-78a7-477d-8def-fbd7ca3846b5")
         val password = "Qwerty1!".toByteArray()
         val decrypted = decryptDatabase(db, password, userId) ?: return

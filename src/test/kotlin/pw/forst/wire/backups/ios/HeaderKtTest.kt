@@ -13,7 +13,7 @@ class HeaderKtTest {
     @Test
     @Disabled
     fun `test read metadata`() {
-        val databaseFile = File("/Users/lukas/work/wire/android-db-decryption/ios_backup.ios_wbu")
+        val databaseFile = File("/Users/lukas/work/wire/android-db-decryption/ignored-assets/ios_backup.ios_wbu")
         val header = readHeader(ByteBuffer.wrap(databaseFile.readBytes()))
         assertNotNull(header)
         print(header)
