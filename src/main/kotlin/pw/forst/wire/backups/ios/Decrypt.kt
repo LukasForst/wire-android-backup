@@ -22,7 +22,8 @@ fun decrypt(input: ByteBuffer, password: String, userId: UUID): ByteArray {
     // read header from the remaining input bytes
     input.get(chachaHeader)
     // initialize state with encryption header and ke
-    Sodium.crypto_secretstream_xchacha20poly1305_init_pull(state, chachaHeader, key)
+    val initPullResult = Sodium.crypto_secretstream_xchacha20poly1305_init_pull(state, chachaHeader, key)
+    require(initPullResult == 0) { "It was not possible to init state!" }
     // read rest of the cipher text
     val cipherText = ByteArray(input.remaining())
     input.get(cipherText)
