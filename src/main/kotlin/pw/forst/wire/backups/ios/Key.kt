@@ -2,6 +2,11 @@ package pw.forst.wire.backups.ios
 
 import org.libsodium.jni.Sodium
 
+/*
+    Taken from original repo
+    https://github.com/wireapp/wire-ios-cryptobox/blob/00ec8c7262d49814744c733c6eaa92e99bcd6b42/WireCryptobox/ChaCha20Encryption.swift#L187
+ */
+
 fun deriveKey(password: String, salt: ByteArray): ByteArray {
     val buffer = ByteArray(Sodium.crypto_secretstream_xchacha20poly1305_keybytes())
     // TODO maybe this part is wrong? there's nothing explicit in the iOS code

@@ -3,6 +3,10 @@ package pw.forst.wire.backups.ios
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 
+/*
+    Taken from original iOS repo:
+    https://github.com/wireapp/wire-ios-cryptobox/blob/00ec8c7262d49814744c733c6eaa92e99bcd6b42/WireCryptobox/ChaCha20Encryption.swift#L88
+ */
 enum class HeaderParameters(
     val headerOrder: Int,
     val len: Int,
@@ -16,7 +20,7 @@ enum class HeaderParameters(
 }
 
 /**
- * IT MODIFIES THE BUFFER!
+ * Note that this function modifies the passed [buffer].
  */
 fun readHeader(buffer: ByteBuffer): EncryptedBackupHeader {
     ByteArray(HeaderParameters.PLATFORM.len)
