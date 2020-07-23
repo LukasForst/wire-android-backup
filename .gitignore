@@ -1,3 +1,4 @@
+ignored-assets
 *.sqlite*
 # Created by https://www.gitignore.io/api/java,kotlin,jetbrains+all
 # Edit at https://www.gitignore.io/?templates=java,kotlin,jetbrains+all
