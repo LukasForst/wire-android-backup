@@ -8,10 +8,10 @@ import java.io.File;
 import java.util.UUID;
 
 import static pw.forst.wire.backups.android.steps.DatabaseDecryptKt.decryptDatabase;
-import static pw.forst.wire.backups.android.steps.DecryptKt.initSodium;
 import static pw.forst.wire.backups.android.steps.OrchestrateKt.decryptAndExtract;
 import static pw.forst.wire.backups.android.steps.UnzipKt.extractBackup;
 import static pw.forst.wire.backups.utils.LibLoadingKt.addLibraryPath;
+import static pw.forst.wire.backups.utils.LibLoadingKt.initSodium;
 
 @Disabled
 public class JavaTest {
@@ -24,7 +24,6 @@ public class JavaTest {
     public void testJavaExecution_decryptAndExtract() {
         addLibraryPath("libs");
         initSodium();
-
         Assertions.assertNotNull(decryptAndExtract(dbFile, password, userId, "./tmp"));
     }
 
