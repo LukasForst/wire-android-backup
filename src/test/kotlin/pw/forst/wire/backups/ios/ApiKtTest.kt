@@ -10,12 +10,13 @@ class ApiKtTest {
         val db = "/Users/lukas/work/wire/android-db-decryption/ignored-assets/dejan.ios_wbu"
         val userId = "a106fcd5-3146-4551-a870-9b13b125f376"
         val password = "Qwerty123!"
-        val decrypted = processIosBackup(
+        val database = processIosBackup(
             encryptedBackupPath = db,
             password = password,
             userIdForBackup = userId,
             outputDirectory = "/Users/lukas/work/wire/android-db-decryption/ignored-assets/test"
         )
-        print(decrypted)
+        println(database)
+        println(database.messages.size)
     }
 }

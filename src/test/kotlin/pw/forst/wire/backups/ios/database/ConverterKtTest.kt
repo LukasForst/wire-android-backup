@@ -12,7 +12,8 @@ class ConverterKtTest {
             "/Users/lukas/work/wire/android-db-decryption/ignored-assets/store.wiredatabase"
         )
         assertTrue { data.isNotEmpty() }
-        print(data)
+        println(data)
+        println(data.size)
     }
 
 }
