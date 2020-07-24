@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class GenericMessageConverterKtTest {
     @Test
     fun `test obtain some protobufs from ios backup`() {
-        val bufs = obtainProtobufsForDatabase("/Users/lukas/work/wire/android-db-decryption/store.wiredatabase")
+        val bufs = obtainProtobufsForDatabase("/Users/lukas/work/wire/android-db-decryption/ignored-assets/store.wiredatabase")
         assertTrue { bufs.isNotEmpty() }
         print(bufs)
     }
