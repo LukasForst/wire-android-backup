@@ -27,7 +27,7 @@ fun iosUuidHash(
 
 private fun asIosBytes(uuid: UUID): ByteArray =
 // because of the bug in the iOS, we need to use 128 bytes
-    // https://github.com/wireapp/wire-ios-cryptobox/blob/00ec8c7262d49814744c733c6eaa92e99bcd6b42/WireCryptobox/ChaCha20Encryption.swift#L146
+// https://github.com/wireapp/wire-ios-cryptobox/blob/00ec8c7262d49814744c733c6eaa92e99bcd6b42/WireCryptobox/ChaCha20Encryption.swift#L146
     ByteBuffer.wrap(ByteArray(128)).apply {
         putLong(uuid.mostSignificantBits)
         putLong(uuid.leastSignificantBits)

@@ -37,7 +37,9 @@ class DecryptKtTest {
         val password = "Qwerty123!"
         val decrypted = decrypt(db, password, userId)
 
-        print(decrypted)
+        val data = File.createTempFile("wire-ios", "dec")
+        data.writeBytes(decrypted)
+        print(data)
     }
 
     @Test
@@ -45,8 +47,14 @@ class DecryptKtTest {
     fun `test ios decryption eva`() {
         val db = File("/Users/lukas/work/wire/android-db-decryption/ignored-assets/ios_backup.ios_wbu")
         val userId = UUID.fromString("e4d71ce0-eb3a-48f6-b319-d677a2dd23b1")
-        val password = "Aa12345!"
+        val password = "Aa12345!2"
         val decrypted = decrypt(db, password, userId)
         print(decrypted)
+
+        val data = File.createTempFile("wire-ios", "dec")
+        data.writeBytes(decrypted)
+
+        print(data)
+
     }
 }

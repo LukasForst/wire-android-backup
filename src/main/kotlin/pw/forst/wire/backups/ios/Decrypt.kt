@@ -21,14 +21,20 @@ fun decrypt(input: ByteBuffer, password: String, userId: UUID): ByteArray {
     val chachaHeader = ByteArray(Sodium.crypto_secretstream_xchacha20poly1305_headerbytes())
     // read header from the remaining input bytes
     input.get(chachaHeader)
-    // initialize state with encryption header and ke
+    // initialize state with encryption header and key
     val initPullResult = Sodium.crypto_secretstream_xchacha20poly1305_init_pull(state, chachaHeader, key)
     require(initPullResult == 0) { "It was not possible to init state!" }
+
+    // TODO and this is magic ladies and gentleman...
+    // found after debugging test cases from iOS not sure whether this is correct
+    // but now is the decryption result 0 and the decrypted data are valid
+    state[32] = 0
+
     // read rest of the cipher text
     val cipherText = ByteArray(input.remaining())
     input.get(cipherText)
     // prepare decryption buffers
-    // TODO allow decryption of larger files
+    // TODO allow decryption of larger files by using 1024*1024 buffer
     val decrypted = ByteArray(cipherText.size + Sodium.crypto_secretstream_xchacha20poly1305_abytes())
     val decryptedMessageLength = IntArray(1)
     val tag = ByteArray(1)
@@ -38,5 +44,5 @@ fun decrypt(input: ByteBuffer, password: String, userId: UUID): ByteArray {
         ByteArray(0), 0
     )
     require(decryptionResult == 0) { "Decryption failed" }
-    return decrypted
+    return decrypted.take(decryptedMessageLength[0]).toByteArray()
 }
