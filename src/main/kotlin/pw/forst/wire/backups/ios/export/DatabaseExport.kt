@@ -1,7 +1,7 @@
 package pw.forst.wire.backups.ios.export
 
 import pw.forst.wire.backups.ios.decryption.decryptIosBackup
-import pw.forst.wire.backups.ios.model.IosDatabase
+import pw.forst.wire.backups.ios.model.IosDatabaseDto
 import java.io.File
 import java.util.UUID
 
@@ -14,20 +14,25 @@ fun exportIosDatabase(inputFile: String, password: String, userId: String) =
 // thus overloading
     exportIosDatabase(inputFile, password, userId, "./")
 
+/**
+ * Decrypts database and returns database metadata and database file.
+ */
+fun exportIosDatabase(inputFile: String, password: String, userId: String, outputPath: String): IosDatabaseDto =
+    exportIosDatabase(inputFile, password, UUID.fromString(userId), outputPath)
 
 /**
  * Decrypts database and returns database metadata and database file.
  */
-fun exportIosDatabase(inputFile: String, password: String, userId: String, outputPath: String): IosDatabase {
+fun exportIosDatabase(inputFile: String, password: String, userId: UUID, outputPath: String): IosDatabaseDto {
     val decryptedBytes = decryptIosBackup(
         File(inputFile),
         password = password,
-        userId = UUID.fromString(userId)
+        userId = userId
     )
 
     val (exportJson, databaseFile) = extractDatabaseFiles(decryptedBytes, outputPath)
     val metadata = parseDatabaseMetadata(exportJson)
-    return IosDatabase(
+    return IosDatabaseDto(
         userId = UUID.fromString(metadata.userIdentifier),
         clientIdentifier = metadata.clientIdentifier,
         modelVersion = metadata.modelVersion,

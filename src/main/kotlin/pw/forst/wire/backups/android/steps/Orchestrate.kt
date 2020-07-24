@@ -1,5 +1,6 @@
 package pw.forst.wire.backups.android.steps
 
+import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.util.UUID
 

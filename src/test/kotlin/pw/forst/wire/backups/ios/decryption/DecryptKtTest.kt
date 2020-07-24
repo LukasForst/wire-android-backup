@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import pw.forst.wire.backups.android.steps.initSodium
+import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.Base64

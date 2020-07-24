@@ -1,15 +1,34 @@
-package pw.forst.wire.backups.ios
+package pw.forst.wire.backups.ios.model
 
 import pw.forst.wire.backups.android.database.converters.ExportDate
 import java.util.UUID
 
+/**
+ * Message from iOS backup with protobuf and envelope.
+ */
 data class IosMessageDto(
+    /**
+     * Id of the message.
+     */
     val id: Int,
+    /**
+     * Who sent the message.
+     */
     val senderUUID: UUID,
+    /**
+     * In which conversation was message posted.
+     */
     val conversationUUID: UUID,
+    /**
+     * When was the conversation sent.
+     */
     val time: ExportDate,
+    /**
+     * Raw protobuf from the server.
+     */
     val protobuf: ByteArray
 ) {
+    @Suppress("DuplicatedCode") // because we need it ofc...
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

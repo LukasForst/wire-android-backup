@@ -1,17 +1,9 @@
 package pw.forst.wire.backups.android.steps
 
-import org.libsodium.jni.NaCl
 import org.libsodium.jni.Sodium
 
 
 private val streamHeaderLength by lazy { Sodium.crypto_secretstream_xchacha20poly1305_headerbytes() }
-
-/**
- * Loads necessary JNI libraries. Must be called before using Sodium.
- */
-fun initSodium() {
-    NaCl.sodium() // dynamically load the libsodium library
-}
 
 /**
  * Decrypts given [input].

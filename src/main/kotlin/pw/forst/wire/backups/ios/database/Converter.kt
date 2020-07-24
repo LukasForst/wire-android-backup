@@ -1,15 +1,31 @@
-package pw.forst.wire.backups.ios
+package pw.forst.wire.backups.ios.database
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import pw.forst.wire.backups.android.database.converters.toExportDate
+import pw.forst.wire.backups.ios.database.model.Conversations
+import pw.forst.wire.backups.ios.database.model.GenericMessageData
+import pw.forst.wire.backups.ios.database.model.Messages
+import pw.forst.wire.backups.ios.database.model.Users
+import pw.forst.wire.backups.ios.model.IosMessageDto
+import java.io.File
 import java.nio.ByteBuffer
 import java.util.UUID
 
-fun obtainIosMessages(pathToDatabaseFile: String): List<IosMessageDto> =
-    transaction(Database.connect("jdbc:sqlite:$pathToDatabaseFile")) {
+/**
+ * Exports all messages from the given iOS database.
+ */
+@Suppress("unused") // used from the Java
+fun obtainIosMessages(decryptedDatabaseFile: File): List<IosMessageDto> =
+    obtainIosMessages(decryptedDatabaseFile.absolutePath)
+
+/**
+ * Exports all messages from the given iOS database.
+ */
+fun obtainIosMessages(decryptedDatabaseFile: String): List<IosMessageDto> =
+    transaction(Database.connect("jdbc:sqlite:$decryptedDatabaseFile")) {
         genericMessages()
     }
 
@@ -31,13 +47,16 @@ private fun genericMessages(): List<IosMessageDto> {
                 .also { println("Message $genericMessageId have conversation $conversationId which is not in the database!") }
             else -> true
         }
-
     }
 
     return (GenericMessageData leftJoin Messages)
         .slice(
-            Messages.id, GenericMessageData.id, Messages.senderId, Messages.conversationId,
-            Messages.timestamp, GenericMessageData.proto
+            Messages.id,
+            GenericMessageData.id,
+            Messages.senderId,
+            Messages.conversationId,
+            Messages.timestamp,
+            GenericMessageData.proto
         )
         .selectAll()
         .filter { isValid(it[GenericMessageData.id], it) }
@@ -54,14 +73,20 @@ private fun genericMessages(): List<IosMessageDto> {
 
 private fun conversationsMap(): Map<Int, UUID> =
     Conversations
-        .slice(Conversations.id, Conversations.remoteUuid)
+        .slice(
+            Conversations.id,
+            Conversations.remoteUuid
+        )
         .selectAll()
         .associate { it[Conversations.id] to it[Conversations.remoteUuid].bytes.toUuid() }
 
 
 private fun usersMap(): Map<Int, UUID> =
     Users
-        .slice(Users.id, Users.remoteUuid)
+        .slice(
+            Users.id,
+            Users.remoteUuid
+        )
         .selectAll()
         .associate { it[Users.id] to it[Users.remoteUuid].bytes.toUuid() }
 

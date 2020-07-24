@@ -17,4 +17,4 @@ internal fun extractDatabaseFiles(decryptedBytes: ByteArray, outputPath: String)
         .apply {
             extractFile("data/store.wiredatabase", outputPath)
             extractFile("export.json", outputPath)
-        }.let { File("$outputPath/export.json") to File("$outputPath/store.wiredatabase") }
+        }.let { File("$outputPath/export.json") to File("$outputPath/data/store.wiredatabase") }

@@ -4,14 +4,15 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import pw.forst.wire.backups.android.steps.decryptDatabase
 import pw.forst.wire.backups.android.steps.extractBackup
-import pw.forst.wire.backups.android.steps.initSodium
 import pw.forst.wire.backups.utils.addLibraryPath
+import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.util.UUID
 import kotlin.test.assertNotNull
 
 @Disabled
 class DecryptionTest {
+
     @Test
     fun `test decryption`() {
         addLibraryPath("libs")
