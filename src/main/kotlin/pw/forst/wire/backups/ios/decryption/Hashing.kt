@@ -1,4 +1,4 @@
-package pw.forst.wire.backups.ios
+package pw.forst.wire.backups.ios.decryption
 
 import org.libsodium.jni.Sodium
 import java.nio.ByteBuffer
@@ -9,7 +9,10 @@ import java.util.UUID
     https://github.com/wireapp/wire-ios-cryptobox/blob/00ec8c7262d49814744c733c6eaa92e99bcd6b42/WireCryptobox/ChaCha20Encryption.swift#L145
  */
 
-fun iosUuidHash(
+/**
+ * Creates hash of UUID.
+ */
+internal fun iosUuidHash(
     uuid: UUID,
     salt: ByteArray
 ): ByteArray {

@@ -1,4 +1,4 @@
-package pw.forst.wire.backups.ios
+package pw.forst.wire.backups.ios.decryption
 
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Disabled

@@ -1,14 +1,20 @@
-package pw.forst.wire.backups.ios
+package pw.forst.wire.backups.ios.decryption
 
 import org.libsodium.jni.Sodium
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.UUID
 
-fun decrypt(databaseFile: File, password: String, userId: UUID): ByteArray =
-    decrypt(ByteBuffer.wrap(databaseFile.readBytes()), password, userId)
+/**
+ * Decrypts and verifies iOS backup. Returns decrypted bytes.
+ */
+fun decryptIosBackup(databaseFile: File, password: String, userId: UUID): ByteArray =
+    decryptIosBackup(ByteBuffer.wrap(databaseFile.readBytes()), password, userId)
 
-fun decrypt(input: ByteBuffer, password: String, userId: UUID): ByteArray {
+/**
+ * Decrypts and verifies iOS backup. Returns decrypted bytes.
+ */
+fun decryptIosBackup(input: ByteBuffer, password: String, userId: UUID): ByteArray {
     // read and verifies the header, modifies input buffer
     val fileHeader = readHeader(input)
     // now we check the uuid
