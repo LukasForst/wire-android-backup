@@ -36,7 +36,8 @@ private fun genericMessages(): List<IosMessageDto> {
     val conversations = conversationsMap()
     val userMap = usersMap()
 
-    return getMessages(conversations, userMap) + getAssets(conversations, userMap)
+    return (getMessages(conversations, userMap) + getAssets(conversations, userMap))
+        .sortedBy { it.time }
 }
 
 private fun getMessages(conversationMap: Map<Int, UUID>, userMap: Map<Int, UUID>): List<IosMessageDto> =
