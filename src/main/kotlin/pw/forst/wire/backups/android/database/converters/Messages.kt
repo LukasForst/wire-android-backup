@@ -21,7 +21,7 @@ fun Transaction.getLikings() =
                 messageId = it[Likings.messageId].toUuid(),
                 userId = it[Likings.userId].toUuid(),
                 conversationId = it[Messages.conversationId].toUuid(),
-                time = it[Likings.timestamp].toExportDate()
+                time = it[Likings.timestamp].toExportDateFromAndroid()
             )
         }
 
@@ -39,7 +39,7 @@ fun Transaction.getTextMessages() =
                 id = row[Messages.id].toUuid(),
                 conversationId = row[Messages.conversationId].toUuid(),
                 userId = row[Messages.userId].toUuid(),
-                time = row[Messages.time].toExportDate(),
+                time = row[Messages.time].toExportDateFromAndroid(),
                 content = parseContent(row[Messages.content]),
                 quote = row[Messages.quote]?.toUuid(),
                 edited = row[Messages.editTime] != 0L

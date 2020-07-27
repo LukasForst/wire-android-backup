@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import pw.forst.wire.backups.android.database.converters.toExportDate
+import pw.forst.wire.backups.android.database.converters.toExportDateFromIos
 import pw.forst.wire.backups.ios.database.model.Conversations
 import pw.forst.wire.backups.ios.database.model.GenericMessageData
 import pw.forst.wire.backups.ios.database.model.Messages
@@ -67,7 +67,7 @@ private fun mapGenericMessage(it: ResultRow, conversationMap: Map<Int, UUID>, us
         id = it[GenericMessageData.id],
         senderUUID = userMap.getValue(requireNotNull(it[Messages.senderId]) { "Sender was null!" }),
         conversationUUID = conversationMap.getValue(requireNotNull(it[Messages.conversationId]) { "Conversation was null!" }),
-        time = it[Messages.timestamp].epochSecond.toExportDate(),
+        time = it[Messages.timestamp].toExportDateFromIos(),
         protobuf = it[GenericMessageData.proto].bytes
     )
 

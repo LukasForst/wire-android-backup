@@ -10,7 +10,12 @@ import java.util.UUID
  */
 typealias ExportDate = String
 
-internal fun Long.toExportDate(): ExportDate = Instant.ofEpochMilli(this).let { dateFormatter.format(it) }
+internal fun Long.toExportDateFromAndroid(): ExportDate = Instant.ofEpochMilli(this).let { dateFormatter.format(it) }
+
+internal fun Double.toExportDateFromIos(): ExportDate =
+    // iOS has custom time format - see https://stackoverflow.com/a/54914712/7169288
+    Instant.ofEpochSecond(this.toLong() + 978307200L).let { dateFormatter.format(it) }
+
 
 internal fun String.toUuid(): UUID = UUID.fromString(this)
 

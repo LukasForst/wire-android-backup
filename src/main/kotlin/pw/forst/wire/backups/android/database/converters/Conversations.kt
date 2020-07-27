@@ -41,7 +41,7 @@ fun Transaction.getConversationsData(): ConversationsDataDto {
         .map {
             ConversationAddMemberDto(
                 conversationId = it[Messages.conversationId].toUuid(),
-                timeStamp = it[Messages.time].toExportDate(),
+                timeStamp = it[Messages.time].toExportDateFromAndroid(),
                 addingUser = it[Messages.userId].toUuid(),
                 addedUsers = it[Messages.members]
                     ?.split(",")
@@ -56,7 +56,7 @@ fun Transaction.getConversationsData(): ConversationsDataDto {
         .map {
             ConversationLeaveMembersDto(
                 conversationId = it[Messages.conversationId].toUuid(),
-                timeStamp = it[Messages.time].toExportDate(),
+                timeStamp = it[Messages.time].toExportDateFromAndroid(),
                 leavingMembers = it[Messages.members]
                     ?.split(",")
                     ?.map(String::toUuid)
