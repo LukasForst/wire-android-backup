@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-class ConverterKtTest {
+class MessagesConverterKtTest {
     @Test
     @Disabled
     fun `test get some data from db`() {

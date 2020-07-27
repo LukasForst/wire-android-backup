@@ -1,5 +1,6 @@
 package pw.forst.wire.backups.ios
 
+import pw.forst.wire.backups.ios.database.obtainIosConversations
 import pw.forst.wire.backups.ios.database.obtainIosMessages
 import pw.forst.wire.backups.ios.export.exportIosDatabase
 import pw.forst.wire.backups.ios.model.IosDatabaseExportDto
@@ -54,6 +55,7 @@ fun processIosBackup(
     ).let { database ->
         IosDatabaseExportDto(
             metadata = database,
-            messages = obtainIosMessages(decryptedDatabaseFile = database.databaseFile)
+            messages = obtainIosMessages(decryptedDatabaseFile = database.databaseFile),
+            conversations = obtainIosConversations(decryptedDatabaseFile = database.databaseFile, userId = userIdForBackup)
         )
     }

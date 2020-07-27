@@ -13,8 +13,8 @@ import pw.forst.wire.backups.ios.database.model.GenericMessageData
 import pw.forst.wire.backups.ios.database.model.Messages
 import pw.forst.wire.backups.ios.database.model.Users
 import pw.forst.wire.backups.ios.model.IosMessageDto
+import pw.forst.wire.backups.ios.toUuid
 import java.io.File
-import java.nio.ByteBuffer
 import java.util.UUID
 
 /**
@@ -83,9 +83,3 @@ private fun usersMap(): Map<Int, UUID> =
         .slice(Users.id, Users.remoteUuid)
         .selectAll()
         .associate { it[Users.id] to it[Users.remoteUuid].bytes.toUuid() }
-
-
-private fun ByteArray.toUuid(): UUID =
-    ByteBuffer.wrap(this).let {
-        UUID(it.long, it.long)
-    }

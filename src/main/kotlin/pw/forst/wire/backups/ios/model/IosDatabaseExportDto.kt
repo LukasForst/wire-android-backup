@@ -11,5 +11,9 @@ data class IosDatabaseExportDto(
     /**
      * Parsed messages from the database.
      */
-    val messages: List<IosMessageDto>
+    val messages: List<IosMessageDto>,
+    /**
+     * All conversations in the database.
+     */
+    val conversations: List<ConversationDto>
 )
