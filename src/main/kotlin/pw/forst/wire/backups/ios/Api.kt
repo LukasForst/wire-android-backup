@@ -1,7 +1,9 @@
 package pw.forst.wire.backups.ios
 
-import pw.forst.wire.backups.ios.database.obtainIosConversations
-import pw.forst.wire.backups.ios.database.obtainIosMessages
+import pw.forst.wire.backups.ios.database.buildMappingCache
+import pw.forst.wire.backups.ios.database.getConversations
+import pw.forst.wire.backups.ios.database.getGenericMessages
+import pw.forst.wire.backups.ios.database.transaction
 import pw.forst.wire.backups.ios.export.exportIosDatabase
 import pw.forst.wire.backups.ios.model.IosDatabaseExportDto
 import java.util.UUID
@@ -53,9 +55,12 @@ fun processIosBackup(
         userId = userIdForBackup,
         outputPath = outputDirectory
     ).let { database ->
-        IosDatabaseExportDto(
-            metadata = database,
-            messages = obtainIosMessages(decryptedDatabaseFile = database.databaseFile),
-            conversations = obtainIosConversations(decryptedDatabaseFile = database.databaseFile, userId = userIdForBackup)
-        )
+        transaction(database.databaseFile) {
+            val cache = buildMappingCache()
+            IosDatabaseExportDto(
+                metadata = database,
+                messages = getGenericMessages(cache),
+                conversations = getConversations(userIdForBackup)
+            )
+        }
     }

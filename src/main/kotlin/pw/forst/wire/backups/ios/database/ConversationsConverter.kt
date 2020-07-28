@@ -1,6 +1,7 @@
 package pw.forst.wire.backups.ios.database
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,7 +31,8 @@ fun obtainIosConversations(decryptedDatabaseFile: String, userId: UUID): List<Co
     }
 
 
-private fun getConversations(userId: UUID) =
+@Suppress("unused") // forcing it to run inside the transaction
+internal fun Transaction.getConversations(userId: UUID) =
     ConversationMembers
         .leftJoin(Conversations)
         .leftJoin(Users)

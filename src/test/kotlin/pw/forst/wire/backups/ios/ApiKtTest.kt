@@ -15,7 +15,6 @@ class ApiKtTest {
         )
         println(database)
         println(database.messages.size)
-
     }
 
     @Test
