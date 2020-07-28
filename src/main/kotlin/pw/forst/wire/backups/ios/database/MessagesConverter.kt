@@ -65,7 +65,7 @@ private fun getAssets(cache: EntityMappingCache): List<IosMessageDto> =
 
 private fun mapGenericMessage(it: ResultRow, cache: EntityMappingCache) =
     IosMessageDto(
-        id = it[GenericMessageData.id],
+        id = it[Messages.id],
         senderUUID = cache.getUsersUuid(requireNotNull(it[Messages.senderId]) { "Sender was null!" }),
         conversationUUID = cache.getConversationUuid(requireNotNull(it[Messages.conversationId]) { "Conversation was null!" }),
         time = it[Messages.timestamp].toExportDateFromIos(),

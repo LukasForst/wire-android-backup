@@ -55,12 +55,12 @@ private fun usersMap(): Map<Int, UUID> =
 internal fun getReactionsMap(): Map<Int, List<Pair<Int, String>>> =
     UsersReactions
         .leftJoin(Reactions)
-        .slice(Reactions.unicodeValue, Reactions.id, UsersReactions.userId)
+        .slice(Reactions.unicodeValue, Reactions.messageId, UsersReactions.userId)
         .selectAll()
         .map {
             object {
                 val unicodeValue = it[Reactions.unicodeValue]
-                val messageId = it[Reactions.id]
+                val messageId = it[Reactions.messageId]
                 val userId = it[UsersReactions.userId]
             }
         }.groupBy { it.messageId }
