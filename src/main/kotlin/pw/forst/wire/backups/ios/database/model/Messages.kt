@@ -7,5 +7,6 @@ internal object Messages : Table("ZMESSAGE") {
     val senderId = (integer("ZSENDER") references Users.id).nullable()
     val timestamp = double("ZSERVERTIMESTAMP")
     val conversationId = (integer("ZVISIBLEINCONVERSATION") references Conversations.id).nullable()
+    val updatedTimestamp = double("ZUPDATEDTIMESTAMP").nullable()
     override val primaryKey = PrimaryKey(GenericMessageData.id)
 }

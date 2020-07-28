@@ -70,7 +70,8 @@ private fun mapGenericMessage(it: ResultRow, conversationMap: Map<Int, UUID>, us
         senderUUID = userMap.getValue(requireNotNull(it[Messages.senderId]) { "Sender was null!" }),
         conversationUUID = conversationMap.getValue(requireNotNull(it[Messages.conversationId]) { "Conversation was null!" }),
         time = it[Messages.timestamp].toExportDateFromIos(),
-        protobuf = it[GenericMessageData.proto].bytes
+        protobuf = it[GenericMessageData.proto].bytes,
+        wasEdited = it[Messages.updatedTimestamp] != null
     )
 
 private fun conversationsMap(): Map<Int, UUID> =

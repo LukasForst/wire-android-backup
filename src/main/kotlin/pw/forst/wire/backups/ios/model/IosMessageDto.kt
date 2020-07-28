@@ -26,9 +26,12 @@ data class IosMessageDto(
     /**
      * Raw protobuf from the server.
      */
-    val protobuf: ByteArray
+    val protobuf: ByteArray,
+    /**
+     * Indicates whether this message was edited.
+     */
+    val wasEdited: Boolean
 ) {
-    @Suppress("DuplicatedCode") // because we need it ofc...
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -40,6 +43,7 @@ data class IosMessageDto(
         if (conversationUUID != other.conversationUUID) return false
         if (time != other.time) return false
         if (!protobuf.contentEquals(other.protobuf)) return false
+        if (wasEdited != other.wasEdited) return false
 
         return true
     }
@@ -50,6 +54,7 @@ data class IosMessageDto(
         result = 31 * result + conversationUUID.hashCode()
         result = 31 * result + time.hashCode()
         result = 31 * result + protobuf.contentHashCode()
+        result = 31 * result + wasEdited.hashCode()
         return result
     }
 }
