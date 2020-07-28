@@ -49,7 +49,8 @@ private fun getConversations(userId: UUID) =
                 id = conversationId,
                 name = conversationName
                     ?: users.firstOrNull { (id, _) -> id != userId }?.second
-                    ?: users.firstOrNull()?.second ?: "No name",
+                    ?: users.firstOrNull()?.second
+                    ?: "No name",
                 members = users.map { (id, _) -> id }
             )
         }

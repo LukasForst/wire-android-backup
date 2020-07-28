@@ -48,7 +48,8 @@ private fun getMessages(conversationMap: Map<Int, UUID>, userMap: Map<Int, UUID>
     ).select {
         GenericMessageData.messageId.isNotNull() and
                 GenericMessageData.assetId.isNull() and
-                GenericMessageData.messageId.eq(Messages.id)
+                GenericMessageData.messageId.eq(Messages.id) and
+                Messages.conversationId.isNotNull()  // TODO verify this, but it seems to be temporal messages
     }.map { mapGenericMessage(it, conversationMap, userMap) }
 
 private fun getAssets(conversationMap: Map<Int, UUID>, userMap: Map<Int, UUID>): List<IosMessageDto> =
@@ -59,7 +60,8 @@ private fun getAssets(conversationMap: Map<Int, UUID>, userMap: Map<Int, UUID>):
     ).select {
         GenericMessageData.messageId.isNull() and
                 GenericMessageData.assetId.isNotNull() and
-                GenericMessageData.assetId.eq(Messages.id)
+                GenericMessageData.assetId.eq(Messages.id) and
+                Messages.conversationId.isNotNull() // TODO verify this, but it seems to be temporal messages
     }.map { mapGenericMessage(it, conversationMap, userMap) }
 
 private fun mapGenericMessage(it: ResultRow, conversationMap: Map<Int, UUID>, userMap: Map<Int, UUID>) =
