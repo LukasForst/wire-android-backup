@@ -15,5 +15,13 @@ data class IosDatabaseExportDto(
     /**
      * All conversations in the database.
      */
-    val conversations: List<ConversationDto>
+    val conversations: List<ConversationDto>,
+    /**
+     * Events when user was added to conversation.
+     */
+    val addedParticipants: List<IosUserAddedToConversation>,
+    /**
+     * Events where user left conversation.
+     */
+    val leftParticipants: List<IosUserLeftConversation>
 )

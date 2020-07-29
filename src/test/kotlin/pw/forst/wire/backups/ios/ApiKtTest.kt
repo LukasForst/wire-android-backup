@@ -34,4 +34,13 @@ class ApiKtTest {
             password = "Aa12345!"
         )
     }
+
+    @Test
+    fun `test dejan56 process backup`() {
+        runTest(
+            db = "/Users/lukas/work/wire/android-db-decryption/ignored-assets/dejan56.ios_wbu",
+            userId = "a106fcd5-3146-4551-a870-9b13b125f376",
+            password = "Qwerty123!"
+        )
+    }
 }

@@ -3,6 +3,8 @@ package pw.forst.wire.backups.ios
 import pw.forst.wire.backups.ios.database.buildMappingCache
 import pw.forst.wire.backups.ios.database.getConversations
 import pw.forst.wire.backups.ios.database.getGenericMessages
+import pw.forst.wire.backups.ios.database.getUserAddedToConversation
+import pw.forst.wire.backups.ios.database.getUserLeftConversation
 import pw.forst.wire.backups.ios.database.transaction
 import pw.forst.wire.backups.ios.export.exportIosDatabase
 import pw.forst.wire.backups.ios.model.IosDatabaseExportDto
@@ -60,7 +62,9 @@ fun processIosBackup(
             IosDatabaseExportDto(
                 metadata = database,
                 messages = getGenericMessages(cache),
-                conversations = getConversations(userIdForBackup)
+                conversations = getConversations(userIdForBackup),
+                addedParticipants = getUserAddedToConversation(cache),
+                leftParticipants = getUserLeftConversation(cache)
             )
         }
     }

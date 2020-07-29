@@ -8,5 +8,9 @@ internal object Messages : Table("ZMESSAGE") {
     val timestamp = double("ZSERVERTIMESTAMP")
     val conversationId = (integer("ZVISIBLEINCONVERSATION") references Conversations.id).nullable()
     val updatedTimestamp = double("ZUPDATEDTIMESTAMP").nullable()
+
+    // basically enum SystemMessageType
+    val systemMessageType = integer("ZSYSTEMMESSAGETYPE").nullable()
+    val entityType = integer("Z_ENT")
     override val primaryKey = PrimaryKey(GenericMessageData.id)
 }
