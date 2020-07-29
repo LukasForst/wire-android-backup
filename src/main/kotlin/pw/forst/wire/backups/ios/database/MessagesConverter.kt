@@ -1,5 +1,6 @@
 package pw.forst.wire.backups.ios.database
 
+import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
@@ -43,7 +44,7 @@ private fun getMessages(cache: EntityMappingCache): List<IosMessageDto> =
         onColumn = GenericMessageData.messageId,
         otherColumn = null,
         additionalConstraint = { GenericMessageData.messageId.isNotNull() }
-    ).select {
+    ).messagesSlice().select {
         GenericMessageData.messageId.isNotNull() and
                 GenericMessageData.assetId.isNull() and
                 GenericMessageData.messageId.eq(Messages.id) and
@@ -56,7 +57,7 @@ private fun getAssets(cache: EntityMappingCache): List<IosMessageDto> =
         onColumn = GenericMessageData.assetId,
         otherColumn = null,
         additionalConstraint = { GenericMessageData.assetId.isNotNull() }
-    ).select {
+    ).messagesSlice().select {
         GenericMessageData.messageId.isNull() and
                 GenericMessageData.assetId.isNotNull() and
                 GenericMessageData.assetId.eq(Messages.id) and
@@ -72,4 +73,10 @@ private fun mapGenericMessage(it: ResultRow, cache: EntityMappingCache) =
         protobuf = it[GenericMessageData.proto].bytes,
         wasEdited = it[Messages.updatedTimestamp] != null,
         reactions = cache.getReactionsForMessagePk(it[Messages.id])
+    )
+
+private fun ColumnSet.messagesSlice() =
+    slice(
+        Messages.id, Messages.senderId, Messages.conversationId, Messages.timestamp,
+        GenericMessageData.proto, Messages.updatedTimestamp
     )
