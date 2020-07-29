@@ -9,7 +9,7 @@ plugins {
 
 }
 
-group = "pw.forst.wire.android.extraction"
+group = "pw.forst.wire"
 version = versioning.info.lastTag
 
 
@@ -70,8 +70,8 @@ tasks {
 }
 
 // ------------------------------------ Deployment Configuration  ------------------------------------
-val githubRepository = "LukasForst/wire-android-backup"
-val descriptionForPackage = "Library for decryption of Wire for Android backups"
+val githubRepository = "LukasForst/wire-backup-export"
+val descriptionForPackage = "Library for decryption of Wire iOS and Android backups"
 val tags = arrayOf("kotlin", "Wire")
 // everything bellow is set automatically
 
