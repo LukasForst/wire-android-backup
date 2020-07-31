@@ -48,8 +48,8 @@ object DatabaseExport {
          * Set path to encrypted export from Wire client application.
          */
         fun fromEncryptedExport(file: File) = this.also {
+            require(file.exists()) { "The provided encrypted database file does not exist!" }
             inputFile = file
-            require(inputFile.exists()) { "The provided encrypted database file does not exist!" }
         }
 
         /**
