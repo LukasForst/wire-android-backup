@@ -1,4 +1,4 @@
-# Wire for Android backup decryption
+# Wire backup decryption
 
 This tool allows to decrypt the backup produced by Wire clients.
 
