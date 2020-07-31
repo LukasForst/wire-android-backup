@@ -27,14 +27,14 @@ internal fun Transaction.verifyConsistency() {
 
 internal fun verifyDatabaseMetadata(db: IosDatabaseDto) {
     val currentSupport = supportedAppVersions.getValue(expectedEntityTypes)
-    require(currentSupport.contains(db.appVersion)) {
-        "Unsupported version of export! This tool supports $currentSupport, but export is ${db.appVersion}"
+    require(currentSupport.contains(db.modelVersion)) {
+        "Unsupported version of export! This tool supports $currentSupport, but export is ${db.modelVersion}"
     }
 }
 
 private val supportedAppVersions = mapOf(
-    mapOf("SystemMessage" to 14, "Reaction" to 18, "User" to 22) to setOf("3.62", "3.61"),
-    mapOf("SystemMessage" to 15, "Reaction" to 19, "User" to 23) to setOf("3.63")
+    mapOf("SystemMessage" to 14, "Reaction" to 18, "User" to 22) to setOf("2.81.0"),
+    mapOf("SystemMessage" to 15, "Reaction" to 19, "User" to 23) to setOf("2.82.0")
 )
 
 private val expectedEntityTypes = mapOf(
