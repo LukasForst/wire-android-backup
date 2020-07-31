@@ -65,3 +65,7 @@ class DecryptionTest {
     }
 }
 ````
+
+
+## Supported versions
+Current iOS model - `2.82.0`
