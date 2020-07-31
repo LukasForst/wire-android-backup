@@ -33,7 +33,8 @@ internal fun verifyDatabaseMetadata(db: IosDatabaseDto) {
 }
 
 private val supportedAppVersions = mapOf(
-    mapOf("SystemMessage" to 14, "Reaction" to 18, "User" to 22) to setOf("3.62", "3.61")
+    mapOf("SystemMessage" to 14, "Reaction" to 18, "User" to 22) to setOf("3.62", "3.61"),
+    mapOf("SystemMessage" to 15, "Reaction" to 19, "User" to 23) to setOf("3.63")
 )
 
 private val expectedEntityTypes = mapOf(
