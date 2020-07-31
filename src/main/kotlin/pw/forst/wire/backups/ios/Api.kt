@@ -6,6 +6,8 @@ import pw.forst.wire.backups.ios.database.getGenericMessages
 import pw.forst.wire.backups.ios.database.getUserAddedToConversation
 import pw.forst.wire.backups.ios.database.getUserLeftConversation
 import pw.forst.wire.backups.ios.database.transaction
+import pw.forst.wire.backups.ios.database.verifyConsistency
+import pw.forst.wire.backups.ios.database.verifyDatabaseMetadata
 import pw.forst.wire.backups.ios.export.exportIosDatabase
 import pw.forst.wire.backups.ios.model.IosDatabaseExportDto
 import java.util.UUID
@@ -57,7 +59,13 @@ fun processIosBackup(
         userId = userIdForBackup,
         outputPath = outputDirectory
     ).let { database ->
+        // verifies that this export tool binary supports given export
+        verifyDatabaseMetadata(database)
+
         transaction(database.databaseFile) {
+            // verify database model first
+            verifyConsistency()
+
             val cache = buildMappingCache()
             IosDatabaseExportDto(
                 metadata = database,

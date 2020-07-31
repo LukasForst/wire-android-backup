@@ -21,6 +21,10 @@ data class IosDatabaseDto(
      */
     val modelVersion: String,
     /**
+     * Version of the application.
+     */
+    val appVersion: String,
+    /**
      * When the export was created.
      */
     val creationTime: ExportDate,

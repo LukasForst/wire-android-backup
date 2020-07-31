@@ -20,7 +20,7 @@ internal fun Transaction.getUserLeftConversation(cache: EntityMappingCache): Lis
     userLeftEvent(cache)
 
 private fun userAddedEvents(cache: EntityMappingCache): List<IosUserAddedToConversation> =
-    (SystemMessagesRelatedUsers leftJoin Messages)
+    (SystemMessagesRelatedUsers innerJoin Messages)
         .slice(Messages.senderId, SystemMessagesRelatedUsers.userId, Messages.conversationId, Messages.timestamp)
         .select {
             Messages.entityType.eq(SYSTEM_MESSAGE_ENTITY_TYPE) and
@@ -39,7 +39,7 @@ private fun userAddedEvents(cache: EntityMappingCache): List<IosUserAddedToConve
         }
 
 private fun userLeftEvent(cache: EntityMappingCache): List<IosUserLeftConversation> =
-    (SystemMessagesRelatedUsers leftJoin Messages)
+    (SystemMessagesRelatedUsers innerJoin Messages)
         .slice(Messages.senderId, SystemMessagesRelatedUsers.userId, Messages.conversationId, Messages.timestamp)
         .select {
             Messages.entityType.eq(SYSTEM_MESSAGE_ENTITY_TYPE) and

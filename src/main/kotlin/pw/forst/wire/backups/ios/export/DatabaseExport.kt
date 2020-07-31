@@ -17,7 +17,7 @@ fun exportIosDatabase(inputFile: String, password: String, userId: String) =
 /**
  * Decrypts database and returns database metadata and database file.
  */
-fun exportIosDatabase(inputFile: String, password: String, userId: String, outputPath: String): IosDatabaseDto =
+fun exportIosDatabase(inputFile: String, password: String, userId: String, outputPath: String) =
     exportIosDatabase(inputFile, password, UUID.fromString(userId), outputPath)
 
 /**
@@ -36,6 +36,7 @@ fun exportIosDatabase(inputFile: String, password: String, userId: UUID, outputP
         userId = UUID.fromString(metadata.userIdentifier),
         clientIdentifier = metadata.clientIdentifier,
         modelVersion = metadata.modelVersion,
+        appVersion = metadata.appVersion,
         creationTime = metadata.creationTime,
         platform = metadata.platform,
         databaseFile = databaseFile

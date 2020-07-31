@@ -7,7 +7,9 @@ import java.io.File
  * Reads metadata about database export.
  */
 internal fun parseDatabaseMetadata(exportJson: File) =
-    requireNotNull(parseJson<ExportFileMetadata>(exportJson.readText())) { "It was not possible to read the export metadata!" }
+    requireNotNull(parseJson<ExportFileMetadata>(exportJson.readText())) {
+        "It was not possible to read the export metadata!"
+    }
 
 internal data class ExportFileMetadata(
     val modelVersion: String,
