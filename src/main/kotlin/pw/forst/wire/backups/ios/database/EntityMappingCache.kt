@@ -54,7 +54,7 @@ private fun usersMap(): Map<Int, UUID> =
 
 internal fun getReactionsMap(): Map<Int, List<Pair<Int, String>>> =
     UsersReactions
-        .leftJoin(Reactions)
+        .innerJoin(Reactions)
         .slice(Reactions.unicodeValue, Reactions.messageId, UsersReactions.userId)
         .selectAll()
         .map {

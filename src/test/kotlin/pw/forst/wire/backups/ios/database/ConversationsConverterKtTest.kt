@@ -1,9 +1,10 @@
 package pw.forst.wire.backups.ios.database
 
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.util.UUID
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ConversationsConverterKtTest {
     @Test
@@ -13,8 +14,9 @@ class ConversationsConverterKtTest {
             "/Users/lukas/work/wire/android-db-decryption/ignored-assets/store.wiredatabase",
             UUID.randomUUID()
         )
-        Assertions.assertTrue { data.isNotEmpty() }
+        assertTrue { data.isNotEmpty() }
         println(data)
         println(data.size)
+        assertEquals(140, data.size)
     }
 }
