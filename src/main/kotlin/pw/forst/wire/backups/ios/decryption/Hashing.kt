@@ -1,6 +1,7 @@
 package pw.forst.wire.backups.ios.decryption
 
-import org.libsodium.jni.Sodium
+import com.goterl.lazycode.lazysodium.SodiumJava
+import com.sun.jna.NativeLong
 import java.nio.ByteBuffer
 import java.util.UUID
 
@@ -12,16 +13,17 @@ import java.util.UUID
 /**
  * Creates hash of UUID.
  */
-internal fun iosUuidHash(
+internal fun SodiumJava.iosUuidHash(
     uuid: UUID,
     salt: ByteArray
 ): ByteArray {
+    crypto_secretstream_xchacha20poly1305_keybytes()
     val uuidBytes = asIosBytes(uuid)
-    val hash = ByteArray(Sodium.crypto_secretstream_xchacha20poly1305_keybytes())
-    val ret = Sodium.crypto_pwhash(
-        hash, hash.size, uuidBytes, uuidBytes.size, salt,
-        crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE,
-        crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE,
+    val hash = ByteArray(crypto_secretstream_xchacha20poly1305_keybytes())
+    val ret = crypto_pwhash(
+        hash, hash.size.toLong(), uuidBytes, uuidBytes.size.toLong(), salt,
+        crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE.toLong(),
+        NativeLong(crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE.toLong()),
         crypto_pwhash_argon2i_ALG_ARGON2I13
     )
     require(ret == 0) { "It was not possible to create hash!" }
