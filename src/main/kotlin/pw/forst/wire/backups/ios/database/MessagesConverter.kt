@@ -1,58 +1,49 @@
 package pw.forst.wire.backups.ios.database
 
 import org.jetbrains.exposed.sql.ColumnSet
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import pw.forst.wire.backups.android.database.converters.toExportDateFromIos
+import pw.forst.wire.backups.ios.database.config.IosDatabase
 import pw.forst.wire.backups.ios.database.model.GenericMessageData
 import pw.forst.wire.backups.ios.database.model.Messages
 import pw.forst.wire.backups.ios.model.IosMessageDto
 
-/**
- * Exports all messages from the given decrypted iOS database.
- */
-fun obtainIosMessages(decryptedDatabaseFile: String): List<IosMessageDto> =
-    transaction(Database.connect("jdbc:sqlite:$decryptedDatabaseFile")) { getGenericMessages() }
-
-internal fun Transaction.getGenericMessages(): List<IosMessageDto> =
+internal fun IosDatabase.getGenericMessages(): List<IosMessageDto> =
     getGenericMessages(buildMappingCache())
 
-@Suppress("unused") // ensure that it is running in the transaction
-internal fun Transaction.getGenericMessages(cache: EntityMappingCache) =
+internal fun IosDatabase.getGenericMessages(cache: EntityMappingCache) =
     (getMessages(cache) + getAssets(cache)).sortedBy { it.time }
 
-private fun getMessages(cache: EntityMappingCache) =
-    GenericMessageData.join(Messages, JoinType.INNER,
-        onColumn = GenericMessageData.messageId,
-        otherColumn = Messages.id,
-        additionalConstraint = { GenericMessageData.messageId.isNotNull() }
+private fun IosDatabase.getMessages(cache: EntityMappingCache) =
+    genericMessageData.join(messages, JoinType.INNER,
+        onColumn = genericMessageData.messageId,
+        otherColumn = messages.id,
+        additionalConstraint = { genericMessageData.messageId.isNotNull() }
     ).messagesSlice()
-        .select { Messages.conversationId.isNotNull() }
+        .select { messages.conversationId.isNotNull() }
         .map { mapGenericMessage(it, cache) }
 
-private fun getAssets(cache: EntityMappingCache) =
-    GenericMessageData.join(Messages, JoinType.INNER,
-        onColumn = GenericMessageData.assetId,
-        otherColumn = Messages.id,
-        additionalConstraint = { GenericMessageData.assetId.isNotNull() }
+private fun IosDatabase.getAssets(cache: EntityMappingCache) =
+    genericMessageData.join(messages, JoinType.INNER,
+        onColumn = genericMessageData.assetId,
+        otherColumn = messages.id,
+        additionalConstraint = { genericMessageData.assetId.isNotNull() }
     ).messagesSlice()
-        .select { Messages.conversationId.isNotNull() }
+        .select { messages.conversationId.isNotNull() }
         .map { mapGenericMessage(it, cache) }
 
-private fun mapGenericMessage(it: ResultRow, cache: EntityMappingCache) =
+private fun IosDatabase.mapGenericMessage(it: ResultRow, cache: EntityMappingCache) =
     IosMessageDto(
-        id = it[Messages.id],
+        id = it[messages.id],
         // these requires should be always ok, if this throws exception, the database is inconsistent
-        senderUUID = cache.getUsersUuid(requireNotNull(it[Messages.senderId]) { "Sender was null!" }),
-        conversationUUID = cache.getConversationUuid(requireNotNull(it[Messages.conversationId]) { "Conversation was null!" }),
-        time = it[Messages.timestamp].toExportDateFromIos(),
-        protobuf = it[GenericMessageData.proto].bytes,
-        wasEdited = it[Messages.updatedTimestamp] != null,
-        reactions = cache.getReactionsForMessagePk(it[Messages.id])
+        senderUUID = cache.getUsersUuid(requireNotNull(it[messages.senderId]) { "Sender was null!" }),
+        conversationUUID = cache.getConversationUuid(requireNotNull(it[messages.conversationId]) { "Conversation was null!" }),
+        time = it[messages.timestamp].toExportDateFromIos(),
+        protobuf = it[genericMessageData.proto].bytes,
+        wasEdited = it[messages.updatedTimestamp] != null,
+        reactions = cache.getReactionsForMessagePk(it[messages.id])
     )
 
 private fun ColumnSet.messagesSlice() =

@@ -1,11 +1,7 @@
 package pw.forst.wire.backups.ios.database
 
-import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.selectAll
-import pw.forst.wire.backups.ios.database.model.Conversations
-import pw.forst.wire.backups.ios.database.model.Reactions
-import pw.forst.wire.backups.ios.database.model.Users
-import pw.forst.wire.backups.ios.database.model.UsersReactions
+import pw.forst.wire.backups.ios.database.config.IosDatabase
 import pw.forst.wire.backups.ios.model.ReactionDto
 import pw.forst.wire.backups.ios.toUuid
 import java.util.UUID
@@ -31,37 +27,31 @@ internal class EntityMappingCache(
             }
 }
 
-@Suppress("unused") // we want to force to run it inside transaction
-internal fun Transaction.buildMappingCache() =
+internal fun IosDatabase.buildMappingCache() =
     EntityMappingCache(
         userMap = usersMap(),
         conversationMap = conversationsMap(),
         reactionsMap = getReactionsMap()
     )
 
-private fun conversationsMap(): Map<Int, UUID> =
-    Conversations
-        .slice(Conversations.id, Conversations.remoteUuid)
+private fun IosDatabase.conversationsMap(): Map<Int, UUID> =
+    conversations
+        .slice(conversations.id, conversations.remoteUuid)
         .selectAll()
-        .associate { it[Conversations.id] to it[Conversations.remoteUuid].bytes.toUuid() }
+        .associate { it[conversations.id] to it[conversations.remoteUuid].bytes.toUuid() }
 
 
-private fun usersMap(): Map<Int, UUID> =
-    Users
-        .slice(Users.id, Users.remoteUuid)
+private fun IosDatabase.usersMap(): Map<Int, UUID> =
+    users
+        .slice(users.id, users.remoteUuid)
         .selectAll()
-        .associate { it[Users.id] to it[Users.remoteUuid].bytes.toUuid() }
+        .associate { it[users.id] to it[users.remoteUuid].bytes.toUuid() }
 
-internal fun getReactionsMap(): Map<Int, List<Pair<Int, String>>> =
-    UsersReactions
-        .innerJoin(Reactions)
-        .slice(Reactions.unicodeValue, Reactions.messageId, UsersReactions.userId)
+internal fun IosDatabase.getReactionsMap(): Map<Int, List<Pair<Int, String>>> =
+    usersReactions
+        .innerJoin(reactions)
+        .slice(reactions.unicodeValue, reactions.messageId, usersReactions.userId)
         .selectAll()
-        .map {
-            object {
-                val unicodeValue = it[Reactions.unicodeValue]
-                val messageId = it[Reactions.messageId]
-                val userId = it[UsersReactions.userId]
-            }
-        }.groupBy { it.messageId }
-        .mapValues { (_, value) -> value.map { it.userId to it.unicodeValue } }
+        .map { Triple(it[reactions.messageId], it[usersReactions.userId], it[reactions.unicodeValue]) }
+        .groupBy { (messageId, _, _) -> messageId }
+        .mapValues { (_, value) -> value.map { (_, userId, unicodeValue) -> userId to unicodeValue } }

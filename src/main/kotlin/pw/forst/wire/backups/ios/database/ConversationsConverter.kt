@@ -1,35 +1,21 @@
 package pw.forst.wire.backups.ios.database
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import pw.forst.wire.backups.ios.database.model.ConversationMembers
-import pw.forst.wire.backups.ios.database.model.Conversations
-import pw.forst.wire.backups.ios.database.model.Users
+import pw.forst.wire.backups.ios.database.config.IosDatabase
 import pw.forst.wire.backups.ios.model.ConversationDto
 import pw.forst.wire.backups.ios.toUuid
 import java.util.UUID
 
-/**
- * Exports all conversations from the given iOS database.
- * [userId] is the id of current user (who created the backup).
- */
-fun obtainIosConversations(decryptedDatabaseFile: String, userId: UUID): List<ConversationDto> =
-    transaction(Database.connect("jdbc:sqlite:$decryptedDatabaseFile")) {
-        getConversations(userId)
-    }
 
-@Suppress("unused") // forcing it to run inside the transaction
-internal fun Transaction.getConversations(userId: UUID) =
-    ConversationMembers
-        .innerJoin(Conversations)
-        .innerJoin(Users)
-        .slice(Conversations.remoteUuid, Conversations.name, Users.remoteUuid, Users.name)
+internal fun IosDatabase.getConversations(userId: UUID) =
+    conversationMembers
+        .innerJoin(conversations)
+        .innerJoin(users)
+        .slice(conversations.remoteUuid, conversations.name, users.remoteUuid, users.name)
         .selectAll()
         .groupBy(
-            { it[Conversations.remoteUuid].bytes.toUuid() to it[Conversations.name] },
-            { it[Users.remoteUuid].bytes.toUuid() to it[Users.name] }
+            { it[conversations.remoteUuid].bytes.toUuid() to it[conversations.name] },
+            { it[users.remoteUuid].bytes.toUuid() to it[users.name] }
         )
         .map { (idName, users) ->
             val (conversationId, conversationName) = idName

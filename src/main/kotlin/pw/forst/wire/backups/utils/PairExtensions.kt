@@ -1,5 +1,7 @@
 package pw.forst.wire.backups.utils
 
+import kotlin.reflect.full.primaryConstructor
+
 inline fun <T, NT, V> Pair<List<T>, V>.mapLeft(block: (T) -> NT): Pair<List<NT>, V> =
     Pair(this.first.map(block), this.second)
 
@@ -17,3 +19,7 @@ inline fun <T, V, NV> Pair<T, V>.letRight(block: (V) -> NV): Pair<T, NV> =
 
 inline fun <T, V, NT, NV> Pair<T, V>.letPair(leftBlock: (T) -> NT, rightBlock: (V) -> NV): Pair<NT, NV> =
     Pair(leftBlock(this.first), rightBlock(this.second))
+
+
+inline fun <reified T : Any> primaryConstructorParameters() =
+    T::class.primaryConstructor?.parameters?.associateBy { it.name }

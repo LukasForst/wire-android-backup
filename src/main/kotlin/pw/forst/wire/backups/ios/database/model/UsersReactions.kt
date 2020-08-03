@@ -2,8 +2,11 @@ package pw.forst.wire.backups.ios.database.model
 
 import org.jetbrains.exposed.sql.Table
 
-internal object UsersReactions : Table("Z_${REACTION_ENTITY_TYPE}USERS") {
-    val reactionId = integer("Z_${REACTION_ENTITY_TYPE}REACTIONS") references Reactions.id
-    val userId = integer("Z_${USER_ENTITY_TYPE}USERS") references Users.id
+internal class UsersReactions(
+    userEntityTypePk: Int,
+    reactionEntityTypePk: Int
+) : Table("Z_${reactionEntityTypePk}USERS") {
+    val reactionId = integer("Z_${reactionEntityTypePk}REACTIONS") references Reactions.id
+    val userId = integer("Z_${userEntityTypePk}USERS") references Users.id
     override val primaryKey = PrimaryKey(reactionId, userId)
 }

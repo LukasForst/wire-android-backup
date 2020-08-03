@@ -6,14 +6,15 @@ import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@Disabled
 class ConversationsConverterKtTest {
     @Test
-    @Disabled
     fun `test get conversations`() {
-        val data = obtainIosConversations(
-            "/Users/lukas/work/wire/android-db-decryption/ignored-assets/store.wiredatabase",
-            UUID.randomUUID()
-        )
+        val data = withDatabase(
+            "/Users/lukas/work/wire/android-db-decryption/ignored-assets/store.wiredatabase"
+        ) {
+            getConversations(UUID.randomUUID())
+        }
         assertTrue { data.isNotEmpty() }
         println(data)
         println(data.size)
