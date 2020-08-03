@@ -1,15 +1,10 @@
 package pw.forst.wire.backups.ios.export
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import pw.forst.wire.backups.utils.initSodium
 
 
 class DatabaseExportKtTest {
-    @BeforeEach
-    fun init() = initSodium()
-
     @Test
     @Disabled
     fun `test database export`() {

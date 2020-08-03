@@ -1,15 +1,5 @@
 package pw.forst.wire.backups.utils
 
-import org.libsodium.jni.NaCl
-
-/**
- * Loads necessary JNI libraries. Must be called before using Sodium.
- */
-fun initSodium() {
-    NaCl.sodium() // dynamically load the libsodium library
-}
-
-
 /**
  * Adds the specified path to the java library path
  *

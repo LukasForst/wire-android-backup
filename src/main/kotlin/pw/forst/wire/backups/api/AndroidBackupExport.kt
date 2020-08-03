@@ -4,7 +4,6 @@ import pw.forst.wire.backups.android.database.converters.extractDatabase
 import pw.forst.wire.backups.android.model.AndroidDatabaseExportDto
 import pw.forst.wire.backups.android.steps.DecryptionResult
 import pw.forst.wire.backups.android.steps.decryptAndExtract
-import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.util.UUID
 
@@ -40,16 +39,12 @@ class AndroidBackupExport internal constructor(
 
     @Suppress("ComplexRedundantLet")
     private fun internallyDecrypt(): DecryptionResult =
-        initSodium().let {
-            requireNotNull(
-                decryptAndExtract(
-                    databaseFile = inputFile,
-                    password = databasePassword.toByteArray(),
-                    userId = userId,
-                    pathToNewFolder = outputDirectory.absolutePath
-                )
-            ) { "It was not possible to decrypt database!" }
-        }
+        decryptAndExtract(
+            databaseFile = inputFile,
+            password = databasePassword.toByteArray(),
+            userId = userId,
+            pathToNewFolder = outputDirectory.absolutePath
+        )
 
 }
 

@@ -1,19 +1,14 @@
 package pw.forst.wire.backups.ios.decryption
 
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.Base64
 import java.util.UUID
 
 class DecryptKtTest {
-    @BeforeEach
-    fun init() = initSodium()
-
     @Test
     fun `test decryption works`() {
         val expectedMessage = "123456789".toByteArray()

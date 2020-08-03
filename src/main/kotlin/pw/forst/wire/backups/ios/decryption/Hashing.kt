@@ -2,6 +2,9 @@ package pw.forst.wire.backups.ios.decryption
 
 import com.goterl.lazycode.lazysodium.SodiumJava
 import com.sun.jna.NativeLong
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_ALG_ARGON2I13
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE
 import java.nio.ByteBuffer
 import java.util.UUID
 

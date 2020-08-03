@@ -1,79 +1,70 @@
 package pw.forst.wire.backups.android.steps
 
-import org.libsodium.jni.Sodium
+import com.goterl.lazycode.lazysodium.SodiumJava
+import com.goterl.lazycode.lazysodium.interfaces.SecretStream
+import com.sun.jna.NativeLong
+import pw.forst.wire.backups.utils.crypto_pwhash_MEMLIMIT_INTERACTIVE
+import pw.forst.wire.backups.utils.crypto_pwhash_OPSLIMIT_INTERACTIVE
+import pw.forst.wire.backups.utils.crypto_pwhash_alg_default
 
-
-private val streamHeaderLength by lazy { Sodium.crypto_secretstream_xchacha20poly1305_headerbytes() }
 
 /**
  * Decrypts given [input].
  */
-fun decrypt(input: ByteArray, password: ByteArray, salt: ByteArray): ByteArray? {
-    val key = hash(password, salt)
-        ?: return null.also { print("Couldn't derive key from password") }
-
-    if (key.size != Sodium.crypto_secretstream_xchacha20poly1305_keybytes()) {
-        print("Key length invalid: ${key.size} did not match ${Sodium.crypto_secretstream_xchacha20poly1305_keybytes()}")
-        return null
-    }
-
+internal fun SodiumJava.decrypt(input: ByteArray, password: ByteArray, metadata: EncryptedBackupHeader): ByteArray {
+    val key = hash(password, metadata.salt, metadata.opslimit, metadata.memlimit)
+    val streamHeaderLength = crypto_secretstream_xchacha20poly1305_headerbytes()
     val header = input.take(streamHeaderLength).toByteArray()
     val cipherText = input.drop(streamHeaderLength).toByteArray()
 
     val state = initPull(key, header)
-        ?: return null.also { print("Failed to init decrypt") }
     // output if decryption was success
-    val decrypted = ByteArray(cipherText.size + Sodium.crypto_secretstream_xchacha20poly1305_abytes())
+    val decrypted = ByteArray(cipherText.size + crypto_secretstream_xchacha20poly1305_abytes())
     // decrypt data
-    val returnCode = Sodium.crypto_secretstream_xchacha20poly1305_pull(
-        state, decrypted, IntArray(0), ByteArray(1), cipherText, cipherText.size,
+    val returnCode = crypto_secretstream_xchacha20poly1305_pull(
+        state, decrypted, LongArray(1), ByteArray(1), cipherText, cipherText.size.toLong(),
         ByteArray(0), 0
     )
-    return when (returnCode) {
-        0 -> decrypted
-        else -> null.also { print("Failed to decrypt backup, got code $returnCode") }
-    }
+    require(returnCode == 0) { "Failed to decrypt backup, got code $returnCode" }
+    return decrypted
 }
 
 /**
  * Creates hash from the given input.
  */
-fun hash(
+fun SodiumJava.hash(
     passBytes: ByteArray,
     salt: ByteArray,
-    opslimit: Int = Sodium.crypto_pwhash_opslimit_interactive(),
-    memlimit: Int = Sodium.crypto_pwhash_memlimit_interactive()
-): ByteArray? {
-    val outputLength = Sodium.crypto_secretstream_xchacha20poly1305_keybytes()
+    opslimit: Int = crypto_pwhash_OPSLIMIT_INTERACTIVE,
+    memlimit: Int = crypto_pwhash_MEMLIMIT_INTERACTIVE
+): ByteArray {
+    val outputLength = crypto_secretstream_xchacha20poly1305_keybytes()
     val output = ByteArray(outputLength)
-
-    val ret = Sodium.crypto_pwhash(
-        output, output.size, passBytes, passBytes.size, salt,
-        opslimit,
-        memlimit,
-        Sodium.crypto_pwhash_alg_default()
+    val ret = crypto_pwhash(
+        output, output.size.toLong(), passBytes, passBytes.size.toLong(), salt,
+        opslimit.toLong(),
+        NativeLong(memlimit.toLong()),
+        crypto_pwhash_alg_default
     )
-
-    return when (ret) {
-        0 -> output
-        else -> null
-    }
+    require(ret == 0) { "It was not possible to create hash!" }
+    return output
 }
 
 
-private fun initPull(key: ByteArray, header: ByteArray): ByteArray? =
+private fun SodiumJava.initPull(key: ByteArray, header: ByteArray): SecretStream.State =
     initializeState(
         key,
         header
-    ) { s, k, h -> Sodium.crypto_secretstream_xchacha20poly1305_init_pull(s, k, h) }
+    ) { s, k, h -> crypto_secretstream_xchacha20poly1305_init_pull(s, k, h) }
 
-private fun initializeState(key: ByteArray, header: ByteArray, init: (ByteArray, ByteArray, ByteArray) -> Int): ByteArray? {
+private fun SodiumJava.initializeState(key: ByteArray, header: ByteArray, init: (SecretStream.State, ByteArray, ByteArray) -> Int):
+        SecretStream.State {
     //Got this magic number from https://github.com/joshjdevl/libsodium-jni/blob/master/src/test/java/org/libsodium/jni/crypto/SecretStreamTest.java#L48
-    val state = ByteArray(52)
-    return when {
-        header.size != Sodium.crypto_secretstream_xchacha20poly1305_headerbytes() -> null.also { print("Invalid header length") }
-        key.size != Sodium.crypto_secretstream_xchacha20poly1305_keybytes() -> null.also { print("Invalid key length") }
-        init(state, header, key) != 0 -> null.also { print("error whilst initializing push") }
-        else -> state
-    }
+    val state = SecretStream.State()
+    require(header.size == crypto_secretstream_xchacha20poly1305_headerbytes()) { "Invalid header length" }
+    require(key.size == crypto_secretstream_xchacha20poly1305_keybytes()) { "Invalid key length" }
+    val ret = init(state, header, key)
+    require(ret == 0) { "It was not possible to initialize state." }
+    return state
+
 }
