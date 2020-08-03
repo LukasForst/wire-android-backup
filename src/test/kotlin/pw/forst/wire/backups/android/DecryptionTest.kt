@@ -1,5 +1,6 @@
 package pw.forst.wire.backups.android
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import pw.forst.wire.backups.android.steps.decryptDatabase
 import pw.forst.wire.backups.android.steps.extractBackup
@@ -7,7 +8,7 @@ import java.io.File
 import java.util.UUID
 import kotlin.test.assertNotNull
 
-//@Disabled
+@Disabled
 class DecryptionTest {
 
     @Test
