@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("ai.blindspot.ktoolz", "ktoolz", "1.0.6")
+    implementation("pw.forst.tools", "katlib", "1.0.0")
     implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.1")
     implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.1")
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.1")
@@ -32,7 +32,6 @@ dependencies {
 
     // logging
     implementation("io.github.microutils", "kotlin-logging", "1.7.9")
-    implementation("ch.qos.logback", "logback-classic", "1.2.3")
 
     implementation("org.xerial", "sqlite-jdbc", "3.32.3")
     val exposedVersion = "0.26.1"

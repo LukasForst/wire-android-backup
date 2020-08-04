@@ -1,9 +1,9 @@
 package pw.forst.wire.backups.android.steps
 
-import ai.blindspot.ktoolz.extensions.parseJson
-import ai.blindspot.ktoolz.extensions.whenFalse
 import com.fasterxml.jackson.annotation.JsonProperty
 import net.lingala.zip4j.ZipFile
+import pw.forst.tools.katlib.parseJson
+import pw.forst.tools.katlib.whenFalse
 import java.io.File
 import java.util.UUID
 
