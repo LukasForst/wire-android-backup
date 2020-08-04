@@ -151,3 +151,4 @@ modules.xml
 
 # End of https://www.gitignore.io/api/java,kotlin,jetbrains+all
 testing.properties
+/export.json
