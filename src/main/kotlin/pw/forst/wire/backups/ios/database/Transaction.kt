@@ -2,6 +2,8 @@ package pw.forst.wire.backups.ios.database
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
+import pw.forst.wire.backups.ios.database.config.IosDatabase
+import pw.forst.wire.backups.ios.database.config.obtainDatabaseTablesConfiguration
 import java.io.File
 
 /**
@@ -18,3 +20,18 @@ internal fun <T> transaction(sqliteDatabasePath: String, statement: Transaction.
     org.jetbrains.exposed.sql.transactions.transaction(
         Database.connect("jdbc:sqlite:$sqliteDatabasePath"), statement
     )
+
+/**
+ * Wrapper which creates [IosDatabase] for you.
+ */
+internal fun <T> withDatabase(sqliteDatabase: File, statement: IosDatabase.() -> T) =
+    withDatabase(sqliteDatabase.absolutePath, statement)
+
+/**
+ * Wrapper which creates [IosDatabase] for you.
+ */
+internal fun <T> withDatabase(sqliteDatabase: String, statement: IosDatabase.() -> T) =
+    transaction(sqliteDatabase) {
+        val config = obtainDatabaseTablesConfiguration()
+        statement(IosDatabase(config))
+    }

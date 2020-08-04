@@ -4,9 +4,8 @@ This tool allows to decrypt the backup produced by Wire clients.
 
 ## Include in project
 
-One must install [libsodium-jni](https://github.com/joshjdevl/libsodium-jni)
-and [libsodium](https://github.com/jedisct1/libsodium) in order to use this library.
-Binaries can be found in `libs` folder.
+The library is using [libsodium](https://github.com/jedisct1/libsodium) binaries 
+included in [lazysodium](https://github.com/terl/lazysodium-java).
 
 Include to maven like this:
 ```xml

@@ -16,26 +16,20 @@ private const val androidMagicNumberLength = 4
 /**
  * Length of the header in the encrypted file. Magic constant taken from https://github.com/wireapp/wire-android
  */
-const val totalHeaderLength = androidMagicNumberLength + 1 + 2 + saltLength + uuidHashLength + 4 + 4
+internal const val totalHeaderLength = androidMagicNumberLength + 1 + 2 + saltLength + uuidHashLength + 4 + 4
 
 /**
  * Reads encrypted meta data, returns null if it was not possible to read them.
  */
-fun readEncryptedMetadata(encryptedBackup: File): EncryptedBackupHeader? =
-    when {
-        encryptedBackup.length() > totalHeaderLength -> parse(
-            readFileBytes(
-                encryptedBackup,
-                byteCount = totalHeaderLength
-            )
-        )
-        else -> null.also { print("Backup file header corrupted or invalid") }
-    }
+internal fun readEncryptedMetadata(encryptedBackup: File): EncryptedBackupHeader {
+    require(encryptedBackup.length() >= totalHeaderLength) { "Backup file header corrupted or invalid" }
+    return parse(readFileBytes(encryptedBackup, byteCount = totalHeaderLength))
+}
 
 /**
  * Read file starting from [offset].
  */
-fun readFileBytes(file: File, offset: Int = 0, byteCount: Int? = null): ByteArray {
+internal fun readFileBytes(file: File, offset: Int = 0, byteCount: Int? = null): ByteArray {
     val outputSize = byteCount ?: file.length().toInt() - offset
 
     return ByteArray(outputSize).apply {
@@ -46,25 +40,21 @@ fun readFileBytes(file: File, offset: Int = 0, byteCount: Int? = null): ByteArra
     }
 }
 
-private fun parse(bytes: ByteArray): EncryptedBackupHeader? {
+private fun parse(bytes: ByteArray): EncryptedBackupHeader {
     val buffer = ByteBuffer.wrap(bytes)
 
-    if (bytes.size != totalHeaderLength)
-        return null.also { print("Invalid header length") }
+    require(bytes.size == totalHeaderLength) { "Invalid header length" }
 
     val magicNumber = ByteArray(androidMagicNumberLength)
         .apply { buffer.get(this) }
         .joinToString("") { it.toChar().toString() }
-
-    if (magicNumber != androidMagicNumber)
-        return null.also { print("archive has incorrect magic number") }
+    require(magicNumber == androidMagicNumber) { "archive has incorrect magic number" }
 
     // skip null byte
     buffer.get()
 
     // check version
-    if (buffer.short != currentVersion)
-        return null.also { print("Unsupported backup version") }
+    require(buffer.short == currentVersion) { "Unsupported backup version" }
 
     // parse header
     return with(buffer) {
@@ -86,7 +76,7 @@ private fun parse(bytes: ByteArray): EncryptedBackupHeader? {
 }
 
 
-data class EncryptedBackupHeader(
+internal data class EncryptedBackupHeader(
     val salt: ByteArray,
     val uuidHash: ByteArray,
     val opslimit: Int,

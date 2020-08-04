@@ -25,7 +25,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.1")
 
     // libsodium for decryption
-    implementation("com.github.joshjdevl.libsodiumjni", "libsodium-jni", "2.0.2")
+    implementation("com.goterl.lazycode", "lazysodium-java", "4.3.0")
+    implementation("net.java.dev.jna", "jna", "5.6.0")
     // unzip
     implementation("net.lingala.zip4j", "zip4j", "2.6.1")
 
@@ -43,6 +44,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
+    testImplementation("org.slf4j", "slf4j-simple", "2.0.0-alpha1")
 
     val junitVersion = "5.6.2"
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
@@ -58,10 +60,6 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
-    }
-
-    withType<Test> {
-        systemProperties["java.library.path"] = "${projectDir}/libs"
     }
 
     test {

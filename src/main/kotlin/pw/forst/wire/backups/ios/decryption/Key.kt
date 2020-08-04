@@ -1,6 +1,10 @@
 package pw.forst.wire.backups.ios.decryption
 
-import org.libsodium.jni.Sodium
+import com.goterl.lazycode.lazysodium.SodiumJava
+import com.sun.jna.NativeLong
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_ALG_ARGON2I13
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_MEMLIMIT_MODERATE
+import pw.forst.wire.backups.utils.crypto_pwhash_argon2i_OPSLIMIT_MODERATE
 
 /*
     Taken from original repo
@@ -10,13 +14,13 @@ import org.libsodium.jni.Sodium
 /**
  * Derives key for given password and salt.
  */
-internal fun deriveKey(password: String, salt: ByteArray): ByteArray {
-    val buffer = ByteArray(Sodium.crypto_secretstream_xchacha20poly1305_keybytes())
+internal fun SodiumJava.deriveKey(password: String, salt: ByteArray): ByteArray {
+    val buffer = ByteArray(crypto_secretstream_xchacha20poly1305_keybytes())
     val passwordBytes = password.toByteArray()
-    val result = Sodium.crypto_pwhash(
-        buffer, buffer.size, passwordBytes, passwordBytes.size, salt,
-        crypto_pwhash_argon2i_OPSLIMIT_MODERATE,
-        crypto_pwhash_argon2i_MEMLIMIT_MODERATE,
+    val result = crypto_pwhash(
+        buffer, buffer.size.toLong(), passwordBytes, passwordBytes.size.toLong(), salt,
+        crypto_pwhash_argon2i_OPSLIMIT_MODERATE.toLong(),
+        NativeLong(crypto_pwhash_argon2i_MEMLIMIT_MODERATE.toLong()),
         crypto_pwhash_argon2i_ALG_ARGON2I13
     )
 

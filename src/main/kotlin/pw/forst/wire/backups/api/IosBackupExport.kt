@@ -3,7 +3,6 @@ package pw.forst.wire.backups.api
 import pw.forst.wire.backups.ios.export.exportIosDatabase
 import pw.forst.wire.backups.ios.model.IosDatabaseExportDto
 import pw.forst.wire.backups.ios.processIosBackup
-import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.util.UUID
 
@@ -26,14 +25,12 @@ class IosBackupExport internal constructor(
 
     @Suppress("ComplexRedundantLet") // not true, we need to init sodium
     override fun decryptDatabase(): File =
-        initSodium().let {
-            exportIosDatabase(
-                inputFile = inputFile.absolutePath,
-                password = databasePassword,
-                userId = userId,
-                outputPath = outputDirectory.absolutePath
-            ).databaseFile
-        }
+        exportIosDatabase(
+            inputFile = inputFile.absolutePath,
+            password = databasePassword,
+            userId = userId,
+            outputPath = outputDirectory.absolutePath
+        ).databaseFile
 
     override fun exportDatabase(): IosDatabaseExportDto =
         processIosBackup(

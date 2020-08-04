@@ -1,6 +1,5 @@
 package pw.forst.wire.backups.android.steps
 
-import pw.forst.wire.backups.utils.initSodium
 import java.io.File
 import java.util.UUID
 
@@ -8,7 +7,7 @@ import java.util.UUID
  * Decrypts the backup and export the database.
  * Returns database file or null when it was not possible to extract the database.
  */
-fun decryptAndExtract(databaseFilePath: String, password: String, userId: String, pathToNewFolder: String = "tmp"): DecryptionResult? =
+fun decryptAndExtract(databaseFilePath: String, password: String, userId: String, pathToNewFolder: String = "tmp") =
     decryptAndExtract(
         File(databaseFilePath),
         password.toByteArray(),
@@ -20,12 +19,10 @@ fun decryptAndExtract(databaseFilePath: String, password: String, userId: String
  * Decrypts the backup and export the database.
  * Returns database file or null when it was not possible to extract the database.
  */
-fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID, pathToNewFolder: String = "tmp"): DecryptionResult? =
-    initSodium().let {
-        decryptDatabase(databaseFile, password, userId)?.let {
-            val (metadata, db) = extractBackup(it, userId, pathToNewFolder)
-            DecryptionResult(metadata, db)
-        }
+internal fun decryptAndExtract(databaseFile: File, password: ByteArray, userId: UUID, pathToNewFolder: String = "tmp"): DecryptionResult =
+    decryptDatabase(databaseFile, password, userId).let {
+        val (metadata, db) = extractBackup(it, userId, pathToNewFolder)
+        DecryptionResult(metadata, db)
     }
 
 data class DecryptionResult(
