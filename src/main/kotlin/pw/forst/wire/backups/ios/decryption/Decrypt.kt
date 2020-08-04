@@ -2,7 +2,7 @@ package pw.forst.wire.backups.ios.decryption
 
 import com.goterl.lazycode.lazysodium.SodiumJava
 import com.goterl.lazycode.lazysodium.interfaces.SecretStream
-import com.goterl.lazycode.lazysodium.utils.LibraryLoader
+import pw.forst.wire.backups.utils.LIBSODIUM_BINARIES_LOADING
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.UUID
@@ -19,7 +19,7 @@ fun decryptIosBackup(databaseFile: File, password: String, userId: UUID): ByteAr
  */
 fun decryptIosBackup(input: ByteBuffer, password: String, userId: UUID): ByteArray {
     // load Sodium library
-    val sodium = SodiumJava(LibraryLoader.Mode.PREFER_SYSTEM)
+    val sodium = SodiumJava(LIBSODIUM_BINARIES_LOADING)
     // read and verifies the header, modifies input buffer
     val fileHeader = readHeader(input)
     // now we check the uuid
