@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "pw.forst.wire"
-version = "1"
+version = versioning.info.lastTag
 
 
 repositories {
@@ -59,6 +59,10 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    withType<Test> {
+        systemProperties["jna.library.path"] = "${projectDir}/libs"
     }
 
     test {
