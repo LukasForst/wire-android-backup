@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "pw.forst.wire"
-version = versioning.info.lastTag
+version = "1"
 
 
 repositories {
