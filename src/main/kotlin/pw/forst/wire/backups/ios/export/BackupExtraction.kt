@@ -3,12 +3,13 @@ package pw.forst.wire.backups.ios.export
 import net.lingala.zip4j.ZipFile
 import java.io.File
 import java.time.Instant
+import java.util.UUID
 
 /**
  * Writes bytes to zip file and extracts them.
  */
 internal fun extractDatabaseFiles(decryptedBytes: ByteArray, outputPath: String): Pair<File, File> =
-    File.createTempFile("wire-ios-${Instant.now()}", "zip")
+    File.createTempFile("wire-ios-${UUID.randomUUID()}", "zip")
         .apply {
             deleteOnExit()
             writeBytes(decryptedBytes)

@@ -4,8 +4,10 @@ This tool allows to decrypt the backup produced by Wire clients.
 
 ## Include in project
 
-The library is using [libsodium](https://github.com/jedisct1/libsodium) binaries 
-included in [lazysodium](https://github.com/terl/lazysodium-java).
+The library is using [libsodium](https://github.com/jedisct1/libsodium) through 
+[lazysodium](https://github.com/terl/lazysodium-java).
+Necessary binaries are included in this repo [here](libs).
+To include them in java one must specify `-Djna.library.path=libs` folder.
 
 Include to maven like this:
 ```xml

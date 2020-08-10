@@ -61,6 +61,10 @@ tasks {
         kotlinOptions.jvmTarget = "1.8"
     }
 
+    withType<Test> {
+        systemProperties["jna.library.path"] = "${projectDir}/libs"
+    }
+
     test {
         useJUnitPlatform()
     }
