@@ -1,5 +1,11 @@
 # Wire backup decryption
 
+____
+
+## Deprecated
+The code from this library was merged with the generating code, thus the library is now deprecated in favour of https://github.com/wireapp/backup-export-tool
+____
+
 This tool allows to decrypt the backup produced by Wire clients.
 
 ## Include in project
